@@ -1,7 +1,11 @@
 import Header from "./components/header"
+import Landing from "./pages/Landing"
 function App() {
   return (
-    <Header />
+    <>
+      <Header />
+      <Landing />
+    </>
   )
 }
 
