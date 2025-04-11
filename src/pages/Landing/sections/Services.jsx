@@ -1,31 +1,38 @@
-function Card() {
+function Card({ service }) {
+    const { title, description, img } = service
     return (
-        <div className="col-4">
-            <div className="card" style={{ width: '18rem' }}>
-                <img src="https://semantic-ui.com/images/wireframe/image.png" className="card-img-top" alt="..." />
+        <div className="col-12 col-md-6 col-xl-4 d-flex justify-content-center align-items-center mb-4">
+            <div className="card shadow-sm" style={{ width: '20rem' }}>
+                <img src={img} className="card-img-top" alt="..." />
                 <div className="card-body">
-                    <h5 className="card-title">Card title</h5>
-                    <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" className="btn btn-primary">Go somewhere</a>
+                    <h5 className="card-title fw-bolder">{title}</h5>
+                    <p className="card-text">{description}</p>
+                    <a href="#" className="btn btn-dark">Ver más</a>
                 </div>
             </div>
         </div>
     )
 }
 
+import { services } from "../../../utiles/data";
+
 
 function Services() {
     return (
-        <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center">
-            <div className="row text-center">
-                <h1 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.5rem', fontWeight: "1000" }}>Nuestros Servicios</h1>
-                <p className="fs-5 fw-bolder text-secondary my-2">Descubre nuestra amplia gama de tratamientos diseñados para rejuvenecer, relajar y revitalizar.</p>
-            </div>
-            <div className="row">
-                <Card />
-                <Card />
-                <Card />
-                <Card />
+        <div className="bg-light" id="services" style={{scrollMarginTop: '70px' }}>
+            <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center">
+                <div className="row text-center mb-4">
+                    <h1 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.5rem', fontWeight: "1000" }} className="mt-3">Nuestros Servicios</h1>
+                    <p className="fs-5 fw-bolder text-secondary my-2">Descubre nuestra amplia gama de tratamientos diseñados para rejuvenecer, relajar y revitalizar.</p>
+                </div>
+                <div className="row">
+                    {services.map((service, index) => {
+                        return (
+                            <Card key={index} service={service} />
+                        )
+                    }
+                    )}
+                </div>
             </div>
         </div>
     )
