@@ -1,15 +1,17 @@
 // Imporatr las secciones que se van a utilizar dentro de la página landing
-import Primary from "./sections/primary";
+import Home from "./sections/home";
 import About from "./sections/About";
 import Services from "./sections/Services";
+import Location from "./sections/location";
 
 
 function Landing() {
     return (
         <div>
-            < Primary />
+            < Home />
             < About />
             < Services />
+            <Location /> 
         </div>
     );
 }
