@@ -1,5 +1,5 @@
 function Card({ service }) {
-    const { title, description, img } = service
+    const { title, description, img } = service;
     return (
         <div className="col-12 col-md-6 col-xl-4 d-flex justify-content-center align-items-center mb-4">
             <div className="card shadow-sm" style={{ width: '20rem' }}>

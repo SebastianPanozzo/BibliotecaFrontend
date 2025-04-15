@@ -2,7 +2,7 @@ import img from "./../../../../public/img/imgHome.webp"
 
 function Home() {
     return (
-        <div className="pt-5 pt-lg-0"  id="home"
+        <div className="pt-5 pt-lg-0" id="home"
             style={{
                 backgroundImage: `url('./public/img/bgDark.webp')`,
                 backgroundSize: "cover",
@@ -12,28 +12,22 @@ function Home() {
             }}
         >
             <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center">
-                <div className="row">
-                    <div className="col-12 col-lg-6 d-flex flex-column align-items-center justify-content-between text-center text-lg-start">
-                        <div>
-                            <h1 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.5rem', fontWeight: "1000" }}
-                                className="text-white mb-1 mb-xl-3">
-                                Descubre la Experiencia de Bienestar Total
-                            </h1>
-                            <p className="fs-5 fw-bolder text-white mb-xxl-5 mb-lg-2">
-                            nos dedicamos a brindarte un oasis de tranquilidad, 
-                            donde cada detalle ha sido cuidadosamente pensado para ofrecerte 
-                            una experiencia de relajación profunda y renovación integral.
-                            </p>
-                        </div>
-
-                        <div className="col-12 d-flex mb-4 mb-lg-0 justify-content-center justify-content-lg-start">
-                            <button className="btn btn-success btn-lg me-2">Explorar Servicios</button>
+                <div className="row align-items-center">
+                    <div className="col-12 col-lg-6 text-center text-lg-start">
+                        <h3 className="text-success fw-bold text-uppercase mb-2 d-block">Bienestar & Relax</h3>
+                        <h1 className="display-4 fw-bold text-white mb-3">
+                            Descubre la Experiencia de Bienestar Total
+                        </h1>
+                        <p className="lead text-white mb-4">
+                            Te brindamos un oasis de tranquilidad, donde cada detalle ha sido cuidadosamente pensado para ofrecerte una experiencia de relajación profunda y renovación integral.
+                        </p>
+                        <div className="d-flex justify-content-center justify-content-lg-start gap-2">
                             <button className="btn btn-success btn-lg">Explorar Servicios</button>
+                            <button className="btn btn-outline-light btn-lg">Conócenos</button>
                         </div>
-
                     </div>
-                    <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center p-2">
-                        <img className="img-fluid rounded rounded-4 shadow-sm" src={img} alt="imagen de spa" />
+                    <div className="col-12 col-lg-6 d-flex justify-content-center mt-4 mt-lg-0">
+                        <img className="img-fluid rounded rounded-4 shadow" src={img} alt="imagen de spa" />
                     </div>
                 </div>
             </div>
