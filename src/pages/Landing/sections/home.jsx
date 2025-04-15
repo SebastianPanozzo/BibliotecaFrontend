@@ -1,4 +1,4 @@
-import img from "./../../../../public/img/imgHome.webp"
+import img from "./../../../../public/svg/img1.svg"
 
 function Home() {
     return (
@@ -27,7 +27,7 @@ function Home() {
                         </div>
                     </div>
                     <div className="col-12 col-lg-6 d-flex justify-content-center mt-4 mt-lg-0">
-                        <img className="img-fluid rounded rounded-4 shadow" src={img} alt="imagen de spa" />
+                        <img className="img-fluid" src={img} alt="imagen de spa" />
                     </div>
                 </div>
             </div>
