@@ -14,7 +14,7 @@ function Home() {
             <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center">
                 <div className="row align-items-center">
                     <div className="col-12 col-lg-6 text-center text-lg-start">
-                        <h3 className="text-success fw-bold text-uppercase mb-2 d-block">Bienestar & Relax</h3>
+                        <h3 className="text-success fw-bold text-uppercase mb-2 d-block">Bienestar & Relax !!!!</h3>
                         <h1 className="display-4 fw-bold text-white mb-3">
                             Descubre la Experiencia de Bienestar Total
                         </h1>
