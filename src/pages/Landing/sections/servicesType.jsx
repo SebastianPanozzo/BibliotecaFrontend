@@ -15,13 +15,13 @@ function Card({ service }) {
 }
 
 import { services } from "../../../utiles/data";
-
+import Carousel from "../../../components/carousel"
 
 function Services() {
     return (
         <div className="bg-light" id="services" 
         style={{
-            backgroundImage: `url('./public/img/bgServices.webp')`,
+            backgroundImage: `url('./public/img/bgAbout.webp')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -35,12 +35,7 @@ function Services() {
                     <p className="fs-5 fw-bolder my-2">Descubre nuestra amplia gama de tratamientos diseñados para rejuvenecer, relajar y revitalizar.</p>
                 </div>
                 <div className="row">
-                    {services.map((service, index) => {
-                        return (
-                            <Card key={index} service={service} />
-                        )
-                    }
-                    )}
+                    <Carousel items={services}/>
                 </div>
             </div>
         </div>
