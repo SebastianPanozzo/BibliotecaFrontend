@@ -3,6 +3,7 @@ import Home from "./sections/home";
 import About from "./sections/About";
 import Services from "./sections/servicesType";
 import Location from "./sections/location";
+import Contacts from "./sections/contacts";
 
 
 function Landing() {
@@ -12,6 +13,7 @@ function Landing() {
             < About />
             < Services />
             < Location /> 
+            <Contacts />
         </div>
     );
 }
