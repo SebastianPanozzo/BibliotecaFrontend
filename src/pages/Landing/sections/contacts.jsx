@@ -1,23 +1,30 @@
-import Form from "../../../components/form"
+import Form from "../../../components/Form";
 
 const context = {
     title: "Contacto",
-    service: "https://nubiant.com/api/service/live/test_joa",
-    style: "col-4",
+    service: "https://nubiant.com/api/service/live/joa_test",
+    style: {},
+    className: "col-4",
+    messages: {
+        success: { show: true, text: "Gracias por contactarte con nosotros." },
+        error: { show: true, text: "Error al enviar el formulario."}
+    },
     inputs: [
         {
             tag: "input",
             type:"text",
             id: "name",
             name: "name",
-            placeholder: "Nombre"
+            placeholder: "Nombre",
+            required: true
         },
         {
             tag: "input",
             type:"password",
             id: "password",
             name: "password",
-            placeholder: "Contraseña"
+            placeholder: "Contraseña",
+            required: true
         }, {
             tag: "textarea",
             id: "text",

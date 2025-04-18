@@ -13,7 +13,7 @@ function Landing() {
             < About />
             < Services />
             < Location /> 
-            <Contacts />
+            < Contacts />
         </div>
     );
 }
