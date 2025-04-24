@@ -5,9 +5,6 @@ function Form({ context }) {
     const [buttonState, setButtonState] = useState("Enviar");
     const [status, setStatus] = useState({ type: null, message: "" }); 
 
-    
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 

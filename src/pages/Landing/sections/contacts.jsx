@@ -37,8 +37,8 @@ const context = {
 
 function Contacts() {
     return (
-        <div className="row min-vh-100 py-4">
-            <div className="col-12 d-flex align-items-center justify-content-center">
+        <div className="py-4">
+            <div className="min-vh-100 container d-flex align-items-center justify-content-center">
                <Form context={context} /> 
             </div>
         </div>

@@ -1,17 +1,15 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
-
 import Header from "./components/Header"
 import Landing from "./pages/Landing"
 import Login from "./pages/Login/Login"
 import Register from "./pages/Register/Register"
-
+import ServiceTypes from "./pages/serviceTypes/serviceTypes";
 
 const Layout = () => {
   return (
     <>
       <Header />
-      <Outlet /> {/* Aquí se renderizarán las rutas hijas */}
-      {/*Futuro Footer */}
+      <Outlet />
     </>
   );
 };
@@ -33,10 +31,13 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
+      {
+        path: "/serviceTypes/:id",
+        element: <ServiceTypes />,
+      },
     ],
   },
 ]);
-
 
 function App() {
   return (<RouterProvider router={router} />)

@@ -7,7 +7,8 @@ import 'swiper/css/autoplay';
 import 'swiper/css/effect-coverflow';
 
 const Slider = ({ context }) => {
-  const { items, Component } = context;
+  const { items, Component, button } = context;
+  
   return (
     <div className="slider-container" style={{ padding: '20px 0' }}>
       <Swiper
@@ -39,9 +40,8 @@ const Slider = ({ context }) => {
       >
         {items.map((item, idx) => (
           <SwiperSlide key={`slide-${idx}`}>
-            <div className="d-flex align-items-center justify-content-center" style={{ height: '50vh', width: '100%' }}>
-              { <Component context={item} /> }
-              {/* < Card service={item} /> */}
+            <div className="d-flex align-items-center justify-content-center" style={{ height: '55vh', width: '100%' }}>
+              {<Component context={{item, button}} />}
             </div>
           </SwiperSlide>
         ))}

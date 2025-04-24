@@ -1,6 +1,10 @@
 import img from "./../../../../public/svg/img1.svg"
 
+import useStore from '../../../hooks/useStore'
+
 function Home() {
+    const { getStorage } = useStore();
+    const { spaData } = getStorage();
     return (
         <div className="pt-5 pt-lg-0" id="home"
             style={{
@@ -21,14 +25,15 @@ function Home() {
                                 WebkitTextFillColor: 'transparent'
                             }}
                             className="fw-bold display-3">
-                            Spa Sentirse Bien
+                            {spaData.name}
                         </h1>
 
                         <h2 className="fw-bold text-white mb-3">
                             Descubre la Experiencia de Bienestar Total
                         </h2>
                         <p className="lead text-white mb-4">
-                            Te brindamos un oasis de tranquilidad, donde cada detalle ha sido cuidadosamente pensado para ofrecerte una experiencia de relajación profunda y renovación integral.
+                            {spaData.description}
+                           
                         </p>
                         <div className="d-flex justify-content-center justify-content-lg-start gap-2">
                             <button className="btn btn-success btn-lg">Explorar Servicios</button>

@@ -1,5 +1,5 @@
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-const apiKey = "AIzaSyBHfojGelZfxKv9RXY1Y38yz8CjdkL5VAk"
+const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 function MyGoogleMap({ context }) {
     return (
