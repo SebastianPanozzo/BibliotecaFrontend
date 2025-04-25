@@ -19,16 +19,19 @@ function Form({ context }) {
 
         const res = await service(body);
         const { err, ok } = res;
+        console.log("resinform", res);
 
         if(err) { 
             setStatus({type: "error", message: err })
             setButtonState("Volver a enviar");
         }
         if(ok) {
-            if(ok.message){setStatus({type: "success", message: ok.message })}
+            if(ok.message){
+                setStatus({type: "success", message: ok.message })
+            }
             setButtonState("Enviar");
             e.target.reset();
-            setData(res);
+            setData(ok.data);
             if(path) {navigateTo(path)}
         }
     }
@@ -37,7 +40,7 @@ function Form({ context }) {
         <form className={`cd-flex flex-column bg-white text-center border border-2 rounded-2 p-3 ${className.form || ""}`}
             style={style}
             onSubmit={handleSubmit}>
-            {title ? (<h3 className="mb-3">{title}</h3>) : null}
+            {title ? (<h3 className={`mb-3 ${className.title || ""}`}>{title}</h3>) : null}
             {inputs.map((item, index) => (
                 <div key={index}>
                     {item.tag === 'input' ? (

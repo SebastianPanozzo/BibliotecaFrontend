@@ -1,12 +1,6 @@
 import Form from "../../components/form";
 import { useState } from "react";
-
-const log = async (o) => {
-  console.log("Log out Login", o)
-  if(o.password === "1234") return {ok: {message: "Acceso concedido"}}
-  return {err: "Acceso denegado, contraseña incorrecta"}
-}
-
+import login from "../../utiles/login";
 
 
 function Login() {
@@ -15,9 +9,9 @@ function Login() {
 
   const context = {
     title: "Login",
-    service: log,
+    service: login,
     style: {},
-    className: { form: "col-4" },
+    className: { form: "col-12 text-success", button: "btn-success", title: "fw-bold" },
     setData: setData,
     path: "/",
     inputs: [
@@ -42,9 +36,13 @@ function Login() {
 
 
   return (
-    <div className="py-4">
-      <div className="min-vh-100 container d-flex align-items-center justify-content-center">
-        <Form context={context} />
+    <div className="">
+      <div className=" container">
+        <div className="row min-vh-100 d-flex justify-content-center align-items-center">
+          <div className="col-11 col-md-8 col-lg-5 col-xxl-4">
+            <Form context={context} />
+          </div>
+        </div>
       </div>
     </div>
   );
