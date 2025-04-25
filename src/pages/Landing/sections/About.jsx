@@ -1,3 +1,4 @@
+import team from "../../../../public/img/team.webp"
 function About() {
   return (
     <div className="" id="about" style={{background: 'rgba(87, 184, 42, 0.2)'}}>
@@ -15,7 +16,7 @@ function About() {
         </div>
         <div className="row mt-lg-4">
           <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
-            <img className="img-fluid rounded rounded-4 shadow-sm" src="/public/img/team.webp" alt="imagen de spa" />
+            <img className="img-fluid rounded rounded-4 shadow-sm" src={team} alt="imagen de spa" />
           </div>
 
           <div className="col-12 col-lg-6 d-flex flex-column align-items-center justify-content-between mt-4 mt-lg-0 text-center text-lg-start">

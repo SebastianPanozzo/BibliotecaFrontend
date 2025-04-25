@@ -1,6 +1,8 @@
 import Form from "../../components/form";
 import { useState } from "react";
 import register from "../../utiles/register";
+import bgDark from '../../../public/img/bgDark.webp'
+
 
 function Register() {
   const [data, setData] = useState();
@@ -60,7 +62,7 @@ function Register() {
   return (
     <div className=""
       style={{
-        backgroundImage: `url('./public/img/bgDark.webp')`,
+        backgroundImage: `url(${bgDark})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

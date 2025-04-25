@@ -2,13 +2,15 @@ import img from "./../../../../public/svg/img1.svg"
 
 import useStore from '../../../hooks/useStore'
 
+import imgBg from '../../../../public/img/bgDark.webp'
+
 function Home() {
     const { get } = useStore();
     const { spaData } = get();
     return (
         <div className="pt-5 pt-lg-0" id="home"
             style={{
-                backgroundImage: `url('./public/img/bgDark.webp')`,
+                backgroundImage: `url(${imgBg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",

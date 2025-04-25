@@ -2,6 +2,7 @@ import Form from "../../components/form";
 import { useState, useEffect } from "react";
 import login from "../../utiles/login";
 import useStore from "../../hooks/useStore";
+import bgDark from '../../../public/img/bgDark.webp'
 
 function Login() {
   const [data, setData] = useState();
@@ -46,7 +47,7 @@ function Login() {
   return (
     <div className=""
       style={{
-        backgroundImage: `url('./public/img/bgDark.webp')`,
+        backgroundImage: `url(${bgDark})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

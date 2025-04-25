@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Slider from "../../../components/Slider"
 import Card from "../../../components/Card"
 import useFetchData from "../../../hooks/useFetchData";
+import bgAbout from "../../../../public/img/bgAbout.webp"
 
 function Services() {
     const [services, setServices] = useState(null);
@@ -42,7 +43,7 @@ function Services() {
     return (
         <div className="bg-light" id="services"
             style={{
-                backgroundImage: `url('./public/img/bgAbout.webp')`,
+                backgroundImage: `url(${bgAbout})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
