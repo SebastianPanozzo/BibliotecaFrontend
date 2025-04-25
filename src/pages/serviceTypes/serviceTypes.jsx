@@ -3,16 +3,19 @@ import { useParams } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
 import Card from "../../components/Card"
 import Error from "../../components/LoadAndErr/Error";
+import Loader from "../../components/LoadAndErr/Loader";
 
 
 import img from "../../../public/img/bgAbout.webp";
 
 const ServiceTypes = () => {
   const { id } = useParams();
+  const [globalError, setGlobalError] = useState(false);
+
   const [services, setServices] = useState(null);
   const [serviceType, setServiceType] = useState(null);
-  const { trigger: objectsTypesTrigger, error, isMutating } = useFetchData(`https://back-production-3d53.up.railway.app/api/findObjectsTypes`);
-  const { trigger: objectsTrigger } = useFetchData(`https://back-production-3d53.up.railway.app/api/findObjects`);
+  const { trigger: getTypeData, error: errorType, isMutating: awaitType } = useFetchData(`https://back-production-3d53.up.railway.app/api/findObjectsTypes`);
+  const { trigger: getObjectData, error: errorObject, isMutating: awaitObject  } = useFetchData(`https://back-production-3d53.up.railway.app/api/findObjects`);
 
   useEffect(() => {
 
@@ -20,11 +23,14 @@ const ServiceTypes = () => {
       try {
         //query del tipo de servicio
         const bodyType = [{ "$match": { "_id": { "$eq": id } } }, { "$project": { "name": 1, "description": 1 } }]
-        const dataType = await objectsTypesTrigger({
+        const dataType = await getTypeData({
           method: 'POST',
           body: bodyType
         });
-        if (!dataType.items[0]) { throw new Error("Service Type not Found") }
+        if (!dataType.items[0]) { 
+          setGlobalError(true);
+          throw new Error("Service Type not Found"); 
+        }
         setServiceType(dataType.items[0]);
 
         //query de los servicios de este tipo
@@ -86,10 +92,14 @@ const ServiceTypes = () => {
             }
           }
         ]
-        const data = await objectsTrigger({
+        const data = await getObjectData({
           method: 'POST',
           body: body
         });
+        if (!data.items.length > 0) { 
+          setGlobalError(true);
+          throw new Error("Services not Found"); 
+        }
         setServices(data.items);
 
       } catch (err) {
@@ -105,8 +115,8 @@ const ServiceTypes = () => {
 
   return (
     <>
-      {(!error && !serviceType && !isMutating) && (<Error backgroundImage={img} />)}
-      {serviceType && (
+      {(awaitType || awaitObject) && (<Loader context={{ image: img }} />)}
+      {(serviceType && services) && (
         <div className="bg-light" id="services"
           style={{
             backgroundImage: `url(${img})`,
@@ -135,6 +145,7 @@ const ServiceTypes = () => {
           </div>
         </div>
       )}
+      {(errorType || errorObject || globalError ) && (<Error backgroundImage={img} />)}
     </>
   );
 };

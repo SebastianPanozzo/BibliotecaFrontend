@@ -5,10 +5,12 @@ import Home from "./sections/home";
 import About from "./sections/About";
 import Services from "./sections/services";
 import Location from "./sections/location";
-import Contacts from "./sections/contacts";
-import Loader from "../../components/LoadAndErr/Loader";
+//import Contacts from "./sections/contacts";
 
-const img = '/img/bgDark'
+import Loader from "../../components/LoadAndErr/Loader";
+import Error from '../../components/LoadAndErr/Error';
+
+import image from '../../../public/img/bgDark.webp'
 
 function Landing() {
     const { storage, saveInStorage } = useStore();
@@ -36,15 +38,14 @@ function Landing() {
 
     return (
         <div>
-            {isMutating && <Loader context={{img: img}} />}
-            {error && <h1>HERRORRRRRRR</h1>}
+            {isMutating && <Loader context={{image}} />}
+            {error && < Error context={{image, message: error.message}} />}
             {storage.spaData && (
                 <>
                     < Home />
                     < About />
                     < Services />
                     < Location />
-                    < Contacts />
                 </>
             )}
         </div>

@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
-import Header from "./components/Header"
+import Header from "./components/header"
 import Landing from "./pages/Landing"
-import Login from "./pages/Login/Login"
+import Login from "./pages/Login/login"
 import Register from "./pages/Register/Register"
 import ServiceTypes from "./pages/serviceTypes/serviceTypes";
 
