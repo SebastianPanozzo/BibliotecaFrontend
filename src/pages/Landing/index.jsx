@@ -13,7 +13,8 @@ import Error from '../../components/LoadAndErr/Error';
 import image from '../../../public/img/bgDark.webp'
 
 function Landing() {
-    const { storage, saveInStorage } = useStore();
+    const { get, save } = useStore();
+    const { spaData } = get();
 
     const { trigger, error, isMutating } = useFetchData('https://back-production-3d53.up.railway.app/api/findObjects');
 
@@ -27,7 +28,7 @@ function Landing() {
                     method: 'POST',
                     body: body
                 });
-                saveInStorage({ spaData: data.items[0] });
+                save({ spaData: data.items[0] });
             } catch (err) {
                 console.error('Error al hacer la request:', err.message);
             }
@@ -40,7 +41,7 @@ function Landing() {
         <div>
             {isMutating && <Loader context={{image}} />}
             {error && < Error context={{image, message: error.message}} />}
-            {storage.spaData && (
+            {spaData && (
                 <>
                     < Home />
                     < About />

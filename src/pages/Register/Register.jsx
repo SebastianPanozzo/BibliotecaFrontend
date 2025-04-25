@@ -55,10 +55,17 @@ function Register() {
       }
     ]
   }
-  
+
 
   return (
-    <div className="">
+    <div className=""
+      style={{
+        backgroundImage: `url('./public/img/bgDark.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }}>
       <div className=" container">
         <div className="row min-vh-100 d-flex justify-content-center align-items-center">
           <div className="col-11 col-md-8 col-lg-5 col-xxl-4">

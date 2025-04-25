@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 function Card({ context }) {
     const navigateTo = useNavigate();
-    const { item: { _id, name, description, image, info }, button, className } = context;
+    const { item: { _id, name, description, image, info }, button } = context;
 
     const navegate = () => {
         const str = `/${button.path}/${_id}`;

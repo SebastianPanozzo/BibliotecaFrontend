@@ -111,7 +111,7 @@ const ServiceTypes = () => {
   }, [id]);
 
   const className = {}
-  const button = { name: "Reservar un turno", path: "serviceTypes" }
+  const button = { name: "Reservar un turno", path: "appointment" }
 
   return (
     <>

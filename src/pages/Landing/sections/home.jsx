@@ -3,8 +3,8 @@ import img from "./../../../../public/svg/img1.svg"
 import useStore from '../../../hooks/useStore'
 
 function Home() {
-    const { getStorage } = useStore();
-    const { spaData } = getStorage();
+    const { get } = useStore();
+    const { spaData } = get();
     return (
         <div className="pt-5 pt-lg-0" id="home"
             style={{
@@ -36,7 +36,9 @@ function Home() {
                            
                         </p>
                         <div className="d-flex justify-content-center justify-content-lg-start gap-2">
-                            <button className="btn btn-success btn-lg">Explorar Servicios</button>
+                            <button className="btn btn-success btn-lg" >
+                            <a className="nav-link" href="#services">Explorar Servicios</a>
+                            </button>
                             <button className="btn btn-outline-light btn-lg">Conócenos</button>
                         </div>
                     </div>
