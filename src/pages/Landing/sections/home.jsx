@@ -35,13 +35,15 @@ function Home() {
                         </h2>
                         <p className="lead text-white mb-4">
                             {spaData.description}
-                           
+
                         </p>
                         <div className="d-flex justify-content-center justify-content-lg-start gap-2">
                             <button className="btn btn-success btn-lg" >
-                            <a className="nav-link" href="#services">Explorar Servicios</a>
+                                <a className="nav-link" href="/serviceTypes">Explorar Servicios</a>
                             </button>
-                            <button className="btn btn-outline-light btn-lg">Conócenos</button>
+                            <button className="btn btn-outline-light btn-lg">
+                                <a className="nav-link" href="/#about">Conócenos</a>
+                            </button>
                         </div>
                     </div>
                     <div className="col-12 col-lg-6 d-flex justify-content-center mt-4 mt-lg-0">

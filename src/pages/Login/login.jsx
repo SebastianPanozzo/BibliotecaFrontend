@@ -1,28 +1,53 @@
-import Form from "../../components/form";
 import { useState, useEffect } from "react";
-import login from "../../utiles/login";
+import { useNavigate } from "react-router-dom";
+import Form from "../../components/Form";
 import useStore from "../../hooks/useStore";
 import bgDark from '../../../public/img/bgDark.webp'
 
+import useFetchData from "../../hooks/useFetchData";
+
 function Login() {
+  const navigateTo = useNavigate();
   const [data, setData] = useState();
+  const [buttonState, setButtonState] = useState("Enviar");
+  const [acces, setAcces] = useState();
+  
+  const { trigger, error } = useFetchData("/loginUser");
   const { save } = useStore();
 
   useEffect(() => {
     if (data) {
       console.log("Log in Login", data);
-      localStorage.setItem('currentUser', JSON.stringify(data));
-      save({ currentUser: data });
+      setButtonState("Ingresando")
+      
+
+      const fetch = async () => {
+        try {
+          const res = await trigger({method: "POST", body: data});
+          if (res) {
+            const currentUser = res.ok.data;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            save({ currentUser: currentUser });
+
+            setButtonState("Enviar");
+            setAcces("Login exitoso");
+            setTimeout(() => { navigateTo(-1)}, 2000);
+          } 
+        } catch (error) {
+          setButtonState("Enviar Nuevamente")
+          console.log("Error de login", error);
+        }
+      }
+      fetch()
     }
-  }, [data]);
+  }, [data, trigger, save, navigateTo]);
 
   const context = {
     title: "Login",
-    service: login,
     style: {},
     className: { form: "col-12 text-success", button: "btn-success", title: "fw-bold" },
-    setData: setData,
-    path: "/",
+    setData,
+    buttonState,
     inputs: [
       {
         tag: "input",
@@ -43,7 +68,6 @@ function Login() {
     ]
   }
 
-
   return (
     <div className=""
       style={{
@@ -57,6 +81,16 @@ function Login() {
         <div className="row min-vh-100 d-flex justify-content-center align-items-center">
           <div className="col-11 col-md-8 col-lg-5 col-xxl-4">
             <Form context={context} />
+            {error && 
+              <div className="alert alert-danger mt-2 mb-0 text-center">
+                {error.message || "Hubo un error al enviar el formulario."}
+              </div>
+            }
+            {acces && 
+              <div className="alert alert-success mt-2 mb-0 text-center">
+                {`${acces}`}
+              </div>
+            }
           </div>
         </div>
       </div>

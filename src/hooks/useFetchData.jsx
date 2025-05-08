@@ -1,25 +1,27 @@
 import useSWRMutation from 'swr/mutation';
+const API_URL = import.meta.env.VITE_URL_API;
 
 function useFetchData(url) {
-
     const sendRequest = async (url, { arg }) => {
-        const { method, body } = arg;
+
+        const { method, body, headers } = arg;
         if (!method || !body) {
             throw new Error(`Invalid arguments: ${JSON.stringify(arg)}`);
         }
 
-        const api_key = import.meta.env.VITE_API_KEY;
-        const response = await fetch(url, {
+        const response = await fetch(`${API_URL}${url}`, {
             method: method,
             headers: {
-                'api-key': api_key,
+                ...(headers || {}),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body),
         });
 
         if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
+            const res = await response.json();
+            const msg = res?.error?.message;
+            throw new Error(`${msg || 'Request failed'}`);
         }
         return response.json();
     };
@@ -34,5 +36,3 @@ function useFetchData(url) {
 }
 
 export default useFetchData;
-
-

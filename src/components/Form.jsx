@@ -1,11 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Form({ context }) {
-    const navigateTo = useNavigate();
-    const { title, inputs, service, style, className, setData, path , moreData} = context;
-    const [buttonState, setButtonState] = useState("Enviar");
-    const [status, setStatus] = useState({ type: null, message: "" });
+    const { title, inputs, style, className, setData, buttonState} = context;
     
     const [inputValues, setInputValues] = useState(() => {
         const initialValues = {};
@@ -25,27 +21,7 @@ function Form({ context }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setButtonState("Enviando...");
-
-        const body = {...inputValues};
-
-        const res = await service({...body, moreData});
-        const { err, ok } = res;
-        //console.log(res);
-
-        if(err) { 
-            setStatus({type: "error", message: err })
-            setButtonState("Volver a enviar");
-        }
-        if(ok) {
-            if(ok.message){
-                setStatus({type: "success", message: ok.message })
-            }
-            setButtonState("Enviar");
-            e.target.reset();
-            setData(ok.data);
-            if(path) {navigateTo(path)}
-        }
+        setData({...inputValues});
     }
 
     return (
@@ -89,17 +65,6 @@ function Form({ context }) {
                 </div>
             ))}
             <button type="submit" className={`form-control btn btn-primary ${className.button || ""}`}>{buttonState}</button>
-
-            {status.type === "success" && status.message && (
-                <div className="alert alert-success mt-3 mb-0">
-                    {status.message}
-                </div>
-            )}
-            {status.type === "error" && (
-                <div className="alert alert-danger mt-2 mb-0">
-                    {status.message || "Hubo un error al enviar el formulario."}
-                </div>
-            )}
         </form>
     );
 }

@@ -1,18 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import useStore from "../hooks/useStore";
-import { useEffect } from "react";
 
 const Header = () => {
     const navigateTo = useNavigate();
-    const { save, get, remove} = useStore();
+    const { get, remove} = useStore();
     const { currentUser } = get();
-
-    useEffect(() => {
-        const currentUser = localStorage.getItem("currentUser");
-        if (currentUser) {
-            save({ currentUser: JSON.parse(currentUser) });
-        }
-    }, []);
 
     const handleLogout = () => {
         remove("currentUser")
@@ -32,7 +24,7 @@ const Header = () => {
             <div className="container">
                 <nav className="navbar navbar-expand-lg">
                     <div className="container-fluid ">
-                        <a className="navbar-brand fw-bolder fs-5 text-success" href="#home" onClick={() => navigateTo('/#home')}>
+                        <a className="navbar-brand fw-bolder fs-5 text-success" href="/" onClick={() => navigateTo('/#home')}>
                             <i className="bi bi-suit-spade-fill me-1 fw-bolder" ></i>
                             Sentirse Bien Spa
                         </a>
@@ -55,7 +47,11 @@ const Header = () => {
                                 </li>
                             </ul>
                             {currentUser ?
-                                <button className="btn btn-success px-5" type="button" onClick={handleLogout} >Salir</button>
+                                <>
+                                    <button className="btn btn-outline-success me-2 px-5" type="button" onClick={() => console.log('click al carrito')}>Mi Carrito</button>
+                                    <button className="btn btn-outline-success me-2" type="button" onClick={() => navigateTo('/')}>Mis Turnos</button>
+                                    <button className="btn btn-success" type="button" onClick={handleLogout} >Salir</button>
+                                </>
                                 :
                                 <>
                                     <button className="btn btn-outline-success me-2 px-5" type="button" onClick={() => navigateTo('/login')}>Ingresar</button>

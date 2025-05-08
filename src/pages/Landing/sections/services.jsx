@@ -7,7 +7,7 @@ import bgAbout from "../../../../public/img/bgAbout.webp"
 
 function Services() {
     const [services, setServices] = useState(null);
-    const { trigger, error } = useFetchData('https://back-production-3d53.up.railway.app/api/findObjectsTypes');
+    const { trigger, error } = useFetchData('/api/findObjectsTypes');
     const button = {name: "Ver más", path: "serviceTypes" }
 
     useEffect(() => {
