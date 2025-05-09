@@ -5,7 +5,7 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login/login";
 import Register from "./pages/Register/Register";
 import ServiceTypes from "./pages/serviceTypes/serviceTypes";
-import Appointment from "./pages/appointment/appointment";
+import ShopCart from "./pages/ShopCart/ShopCart";
 
 import Loader from "./components/LoadAndErr/Loader";
 import Error from "./components/LoadAndErr/Error";
@@ -95,13 +95,13 @@ const router = createBrowserRouter([
         element: <ServiceTypes />,
       },
       {
-        path: "/appointment/:id",
+        path: "/shopCart",
         element: (
           <ProtectedRoute>
-            <Appointment />
+            <ShopCart />
           </ProtectedRoute>
         ),
-      },
+      }
     ],
   },
   {

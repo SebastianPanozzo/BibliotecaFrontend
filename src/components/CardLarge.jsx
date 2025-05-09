@@ -15,12 +15,11 @@ const CardLarge = ({ context }) => {
         }
 
         const ShopCartLS = JSON.parse(localStorage.getItem("ShopCart")) || [];
-        ShopCartLS.push(_id);
+        ShopCartLS.push(context);
         localStorage.setItem("ShopCart", JSON.stringify(ShopCartLS));
 
-        ShopCart.push(_id);
-        save(ShopCart);
-        console.log(get().ShopCart);
+        //ShopCart.push(context);
+        save({ ShopCart: ShopCartLS });
     };
 
     return (
