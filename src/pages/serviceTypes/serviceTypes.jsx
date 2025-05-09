@@ -114,7 +114,7 @@ const ServiceTypes = () => {
             backgroundAttachment: "fixed",
             scrollMarginTop: '100px',
           }}>
-          <div className="container mt-4 min-vh-100 d-flex flex-column align-items-center justify-content-center text-white">
+          <div className="container mt-5 min-vh-100 d-flex flex-column align-items-center justify-content-center text-white">
             <div className="row">
               <div className="card mb-3 shadow-sm border-0 p-4">
                 <h2 className="text-success fw-bold mb-2">{`Tipos de ${serviceType.name}`}</h2>

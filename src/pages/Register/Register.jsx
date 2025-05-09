@@ -103,7 +103,8 @@ function Register() {
             }
             {acces && 
               <div className="alert alert-success mt-2 mb-0 text-center">
-                {`${acces}`}
+                <h5>{`${acces}`}</h5>
+                <p>Redirigiendo al login...</p>
               </div>
             }
           </div>

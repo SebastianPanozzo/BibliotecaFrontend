@@ -175,7 +175,7 @@ const ShopCart = () => {
                 backgroundRepeat: "no-repeat",
                 backgroundAttachment: "fixed",
             }}>
-            <div className="container pt-4">
+            <div className="container pt-5">
                 <div className="row ">
                     <div className="card col-12 mb-2 shadow-sm p-4 text-center border border-2">
                         <h2 className="text-success fw-bold mb-2">Haga su reservación</h2>

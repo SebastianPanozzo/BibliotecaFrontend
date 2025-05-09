@@ -31,7 +31,7 @@ function Login() {
 
             setButtonState("Enviar");
             setAcces("Login exitoso");
-            setTimeout(() => { navigateTo(-1)}, 2000);
+            setTimeout(() => { navigateTo('/')}, 2000);
           } 
         } catch (error) {
           setButtonState("Enviar Nuevamente")
@@ -88,7 +88,8 @@ function Login() {
             }
             {acces && 
               <div className="alert alert-success mt-2 mb-0 text-center">
-                {`${acces}`}
+                <h5>{`${acces}`}</h5>
+                <p>Redirigiendo a la pagina principal...</p>
               </div>
             }
           </div>
