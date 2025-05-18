@@ -2,6 +2,7 @@ import useSWRMutation from 'swr/mutation';
 const API_URL = import.meta.env.VITE_URL_API;
 
 function useFetchData(url) {
+
     const sendRequest = async (url, { arg }) => {
 
         const { method, body, headers } = arg;

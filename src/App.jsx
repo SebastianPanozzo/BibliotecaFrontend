@@ -6,6 +6,7 @@ import Login from "./pages/Login/login";
 import Register from "./pages/Register/Register";
 import ServiceTypes from "./pages/serviceTypes/serviceTypes";
 import ShopCart from "./pages/ShopCart/ShopCart";
+import Appointments from "./pages/Appointments/Appointments"
 
 import Loader from "./components/LoadAndErr/Loader";
 import Error from "./components/LoadAndErr/Error";
@@ -36,13 +37,20 @@ const Layout = () => {
         });
 
         save({ spaData: data.items[0] });
+        sessionStorage.setItem('spaData', JSON.stringify(data.items[0]));
 
       } catch (err) {
         console.error('Error al hacer la request:', err.message);
       }
 
     }
-    fetch()
+    if(!sessionStorage.getItem('spaData')){
+      fetch()
+    } else {
+      const spaData = JSON.parse(sessionStorage.getItem('spaData'));
+      save({ spaData: spaData });
+    }
+    
   }, [save, trigger]);
 
 
@@ -99,6 +107,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ShopCart />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/appointments",
+        element: (
+          <ProtectedRoute>
+            <Appointments />
           </ProtectedRoute>
         ),
       }
