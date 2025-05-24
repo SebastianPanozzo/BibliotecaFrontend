@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useFetchData from "../../hooks/useFetchData";
-import CardLarge from "../../components/CardLarge";
-import Error from "../../components/LoadAndErr/Error";
-import Loader from "../../components/LoadAndErr/Loader";
+import useFetchData from "../../../hooks/useFetchData";
+import CardLarge from "../../../components/CardLarge";
+import Error from "../../../components/LoadAndErr/Error";
+import Loader from "../../../components/LoadAndErr/Loader";
 
-import img from "../../../public/img/bgAbout.webp";
+import img from "../../../../public/img/bgAbout.webp";
 
 const queryTypeServices = (objectType) => {
   const query = [

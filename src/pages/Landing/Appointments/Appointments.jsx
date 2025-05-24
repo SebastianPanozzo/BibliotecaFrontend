@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import DropAppointment from "../../components/DropAppointment";
-import useFetchData from "../../hooks/useFetchData";
-import useStore from "../../hooks/useStore";
-import image from "../../../public/img/bgDark.webp"
-import Error from "../../components/LoadAndErr/Error";
-import Loader from "../../components/LoadAndErr/Loader";
-import { appointmentQuery } from "../../utiles/querys";
+import DropAppointment from "../..//../components/DropAppointment";
+import useFetchData from "../../../hooks/useFetchData";
+import useStore from "../../../hooks/useStore";
+import image from "../../../../public/img/bgDark.webp"
+import Error from "../../../components/LoadAndErr/Error";
+import Loader from "../../../components/LoadAndErr/Loader";
+import { appointmentQuery } from "../../../utiles/querys";
 
 const getNestedValue = (obj, path) => {
     return path.split('.').reduce((acc, key) => acc?.[key], obj);

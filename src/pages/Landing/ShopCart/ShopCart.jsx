@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import img from "../../../public/img/bgDark.webp"
-import useStore from "../../hooks/useStore";
-import Form from "../../components/Form"
+import img from "../../../../public/img/bgDark.webp"
+import useStore from "../../../hooks/useStore";
+import Form from "../../../components/Form"
 
-import useFetchData from "../../hooks/useFetchData";
+import useFetchData from "../../../hooks/useFetchData";
 
 const Table = ({ context }) => {
     const { items, removeItem } = context;

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import useStore from "../hooks/useStore";
+import useStore from "../../hooks/useStore";
 
 const Header = () => {
     const navigateTo = useNavigate();
