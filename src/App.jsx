@@ -5,10 +5,14 @@ import Login from "./pages/Login/login";
 import Register from "./pages/Register/Register";
 import ServiceTypes from "./pages/Landing/serviceTypes/serviceTypes";
 import ShopCart from "./pages/Landing/ShopCart/ShopCart";
+import ShopCart2 from "./pages/Landing/ShopCart/ShopCart2";
 import Appointments from "./pages/Landing/Appointments/Appointments"
 
 import WorkSpaceLayout from "./pages/WorkSpace";
-import Management from "./pages/WorkSpace/Management";
+import AppointmentManagement from "./pages/WorkSpace/AppointmentManagement";
+import PersonalManagement from "./pages/WorkSpace/PersonalManagement";
+import ServicesManagement from "./pages/WorkSpace/ServicesManagement";
+import Analytics from "./pages/WorkSpace/Analytics";
 
 import Error from "./components/LoadAndErr/Error";
 import image from "../public/img/bgDark.webp"
@@ -48,6 +52,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/shopCart2",
+        element: (
+          <ProtectedRoute>
+            <ShopCart2 />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "/appointments",
         element: (
           <ProtectedRoute>
@@ -62,8 +74,20 @@ const router = createBrowserRouter([
     element: <WorkSpaceLayout />,
     children: [
       {
-        path: "/workspace",
-        element: <Management />,
+        path: "/workspace/appointmentManagement",
+        element: <AppointmentManagement />,
+      },
+      {
+        path: "/workspace/personalManagement",
+        element: <PersonalManagement />,
+      },
+      {
+        path: "/workspace/servicesManagement",
+        element: <ServicesManagement />,
+      },
+      {
+        path: "/workspace/analytics",
+        element: <Analytics />,
       }
     ],
   },

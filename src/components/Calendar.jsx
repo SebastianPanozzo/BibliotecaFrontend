@@ -1,40 +1,46 @@
 import { Calendar } from 'rsuite';
 import { useState } from 'react';
 
-const cellClassName = (date, events) => {
-    const day = date.getDate();
-    let found = false;
-    events.forEach(item => {
-        if(item.duration?.start){
-            const itemdate = new Date(item.duration.start).getDate();
-            if (itemdate === day) found = true;
-        }
-    })
-
-    if(found){
-        return "bg-success rounded-circle fw-bold "
+const cellClassName = (date, dates, style) => {
+    const day = date.toISOString().split('T')[0];  
+    if(dates.includes(day)){
+        return `${style ?? "bg-primary bg-opacity-25 fw-bold"}`
+    } else {
+        return "";
     }
-
-    return "";
 }
 
-const CalendarComponent = ({context}) => {
-    const[localMonth, setLocalMonth] = useState(new Date());
-    const {events, setMonth, setDate} = context;
+const CalendarComponent = ({ context }) => {
+    const [localMonth, setLocalMonth] = useState(new Date());
+    const { events, setMonth, date, setDate, style } = context;
+    
+    let dates = [];
+    if(Array.isArray(events) && events.length > 0){
+        dates = events.map((d) => {return new Date(d).toISOString().split('T')[0]})
+    }
 
     const handelSetMonth = (date) => {
-        if(date.getMonth() !== localMonth.getMonth()){
-            setLocalMonth(date);
-            setMonth(date);
+        if (setMonth !== null) {
+            if (date.getMonth() !== localMonth.getMonth()) {
+                setLocalMonth(date);
+                setMonth(date);
+            }
         }
     };
+
+    const handelSetDate = (date) => {
+        if(setDate !== null){
+            setDate(date)
+        }
+    }
 
     return (
         <Calendar
             compact
             bordered
-            cellClassName={(date) => cellClassName(date, events)}
-            onSelect={(date) => setDate(date)}
+            cellClassName={(d) => cellClassName(d, dates, style)}
+            value={date}
+            onSelect={handelSetDate}
             onChange={handelSetMonth}
             style={{ height: '350px' }}
         />

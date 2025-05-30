@@ -4,74 +4,9 @@ import useFetchData from "../../../hooks/useFetchData";
 import CardLarge from "../../../components/CardLarge";
 import Error from "../../../components/LoadAndErr/Error";
 import Loader from "../../../components/LoadAndErr/Loader";
-
 import img from "../../../../public/img/bgAbout.webp";
 
-const queryTypeServices = (objectType) => {
-  const query = [
-    {
-      "$match": {
-        "_id": objectType
-      }
-    },
-    {
-      "$lookup": {
-        "from": "objects",
-        "localField": "_id",
-        "foreignField": "type",
-        "pipeline": [
-          {
-            "$project": {
-              "name": true,
-              "description": true,
-              "image": true,
-              "props": true
-            }
-          }
-        ],
-        "as": "services"
-      }
-    },
-    {
-      "$project": {
-        "name": true,
-        "description": true,
-        "services": true
-      }
-    }
-  ]
-  return query;
-}
-
-const queryServices = () => {
-  const query = [
-    {
-      "$lookup": {
-        "from": "objecttypes",
-        "localField": "type",
-        "foreignField": "_id",
-        "as": "object_type"
-      }
-    },
-    {
-      "$unwind": "$object_type"
-    },
-    {
-      "$match": {
-        "object_type.parent": "service"
-      }
-    },
-    {
-      "$project": {
-        "name": true,
-        "description": true,
-        "image": true,
-        "props": true
-      }
-    }
-  ]
-  return query;
-}
+import { queryServices, queryTypeServices } from "../../../utiles/querys"
 
 const ServiceTypes = () => {
   const { id } = useParams();
@@ -86,7 +21,7 @@ const ServiceTypes = () => {
       try {
         const res = await trigger({
           method: 'POST',
-          body: id ? queryTypeServices(id) : queryServices()
+          body: id ? queryTypeServices(id) : queryServices
         });
 
         const serviceObjectType = id ? res.items[0] : { name: "Servicios", description: "Todos nuestros servicios disponibles" };

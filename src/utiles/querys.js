@@ -98,3 +98,66 @@ export const appointmentQuery = [
         }
     }
 ]
+
+export const queryServices = [
+    {
+        "$lookup": {
+            "from": "objecttypes",
+            "localField": "type",
+            "foreignField": "_id",
+            "as": "object_type"
+        }
+    },
+    {
+        "$unwind": "$object_type"
+    },
+    {
+        "$match": {
+            "object_type.parent": "service"
+        }
+    },
+    {
+        "$project": {
+            "name": true,
+            "description": true,
+            "image": true,
+            "categorie": "$object_type.name",
+            "props": true
+        }
+    }
+]
+
+export const queryTypeServices = (objectType) => {
+  return[
+    {
+      "$match": {
+        "_id": objectType
+      }
+    },
+    {
+      "$lookup": {
+        "from": "objects",
+        "localField": "_id",
+        "foreignField": "type",
+        "pipeline": [
+          {
+            "$project": {
+              "name": true,
+              "description": true,
+              "image": true,
+              "props": true
+            }
+          }
+        ],
+        "as": "services"
+      }
+    },
+    {
+      "$project": {
+        "name": true,
+        "description": true,
+        "services": true
+      }
+    }
+  ]
+}
