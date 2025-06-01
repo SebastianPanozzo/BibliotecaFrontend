@@ -7,6 +7,7 @@ import ServiceTypes from "./pages/Landing/serviceTypes/serviceTypes";
 import ShopCart from "./pages/Landing/ShopCart/ShopCart";
 import ShopCart2 from "./pages/Landing/ShopCart/ShopCart2";
 import Appointments from "./pages/Landing/Appointments/Appointments"
+import Profile from "./pages/Landing/Profile"
 
 import WorkSpaceLayout from "./pages/WorkSpace";
 import AppointmentManagement from "./pages/WorkSpace/AppointmentManagement";
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Appointments />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         ),
       }
