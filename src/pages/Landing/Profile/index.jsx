@@ -3,6 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import useStore from '../../../hooks/useStore';
 import useFetchData from '../../../hooks/useFetchData';
 
+// Query para obtener datos del usuario por ID
+const queryUserById = (userId) => [
+  { $match: { _id: { "$eq": userId } } }
+];
+
 // Componente Modal interno mejorado
 const EditProfileModal = ({ 
   id, 
@@ -12,7 +17,7 @@ const EditProfileModal = ({
   onUpdate 
 }) => {
   const modalRef = useRef();
-  const { trigger: updateTrigger } = useFetchData("/updateUser");
+  const { trigger: updateTrigger } = useFetchData(`/api/updateUser/${userData._id}`);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -83,12 +88,11 @@ const EditProfileModal = ({
       // Preparar los datos con la fecha ajustada (+3 horas)
       const dataToSend = {
         ...formData,
-        email: userData.email, // Mantener el email actual
         birthdate: formData.birthdate ? addThreeHours(formData.birthdate) : ''
       };
 
       const response = await updateTrigger({
-        method: "POST",
+        method: "PUT",
         body: dataToSend,
         headers: { "Authorization": userData.token }
       });
@@ -238,24 +242,102 @@ const EditProfileModal = ({
 };
 
 export default function Profile() {
-  const { get } = useStore();
+  const { get, save } = useStore();
   const [userData, setUserData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Hook para fetch de datos del usuario
+  const { trigger, isMutating } = useFetchData('/api/findObjects');
 
   useEffect(() => {
-    // Obtener datos del usuario desde localStorage o store
-    const currentUser = JSON.parse(localStorage.getItem('currentUser')) || get()?.currentUser;
-    if (currentUser) {
-      setUserData(currentUser);
-    }
-  }, [get]);
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const handleUpdateUser = (updatedData) => {
-    setUserData(updatedData);
-    localStorage.setItem('currentUser', JSON.stringify(updatedData));
+        // Obtener el ID del usuario desde localStorage
+        const currentUser = JSON.parse(localStorage.getItem('currentUser')) || get()?.currentUser;
+        
+        if (!currentUser || !currentUser._id) {
+          throw new Error('No se encontró información del usuario');
+        }
+
+        // Hacer query al backend para obtener datos actualizados
+        const response = await trigger({
+          method: 'POST',
+          body: queryUserById(currentUser._id)
+        });
+
+        if (response && response.items && response.items.length > 0) {
+          const updatedUserData = {
+            ...response.items[0],
+            token: currentUser.token // Preservar el token de autenticación
+          };
+          
+          setUserData(updatedUserData);
+          
+          // Actualizar localStorage y store con los datos frescos del backend
+          localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
+          save({ currentUser: updatedUserData });
+        } else {
+          throw new Error('No se encontraron datos del usuario');
+        }
+      } catch (err) {
+        console.error('Error fetching user data:', err);
+        setError(err.message);
+        
+        // Como fallback, usar datos del localStorage si existen
+        const currentUser = JSON.parse(localStorage.getItem('currentUser')) || get()?.currentUser;
+        if (currentUser) {
+          setUserData(currentUser);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [get, save, trigger]);
+
+  const handleUpdateUser = async (updatedData) => {
+    try {
+      // Cerrar el modal primero
+      setShowModal(false);
+    
+      // Actualizar estado local inmediatamente
+      setUserData(updatedData);
+    
+      // Actualizar localStorage
+      localStorage.setItem('currentUser', JSON.stringify(updatedData));
+    
+      // Actualizar useStore
+      save({ currentUser: updatedData });
+
+      // Opcionalmente, refrescar datos del backend para asegurar sincronización
+      const response = await trigger({
+        method: 'POST',
+        body: queryUserById(updatedData._id)
+      });
+
+      if (response && response.items && response.items.length > 0) {
+        const freshData = {
+          ...response.items[0],
+          token: updatedData.token
+        };
+      
+        setUserData(freshData);
+        localStorage.setItem('currentUser', JSON.stringify(freshData));
+        save({ currentUser: freshData });
+      }
+    } catch (err) {
+      console.error('Error updating user data:', err);
+    }
   };
 
-  if (!userData) {
+  // Mostrar loader mientras se cargan los datos
+  if (loading || isMutating) {
     return (
       <div className="bg-light min-vh-100 px-2 bg-spa-img d-flex justify-content-center align-items-center" id="services">
         <div className="spinner-border text-success" role="status">
@@ -265,49 +347,81 @@ export default function Profile() {
     );
   }
 
+  // Mostrar error si no se pudieron cargar los datos
+  if (error && !userData) {
+    return (
+      <div className="bg-light min-vh-100 px-2 bg-spa-img d-flex justify-content-center align-items-center" id="services">
+        <div className="alert alert-danger text-center">
+          <h4>Error al cargar el perfil</h4>
+          <p>{error}</p>
+          <button 
+            className="btn btn-success" 
+            onClick={() => window.location.reload()}
+          >
+            Intentar de nuevo
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // No mostrar nada si no hay datos de usuario
+  if (!userData) {
+    return null;
+  }
+
   return (
     <div className="bg-light min-vh-100 px-2 bg-spa-img" id="services">
       <div className="container py-5">
         <div className="row justify-content-center">
-          <div className="col-12 col-lg-10 col-xl-8">
-            {/* Tarjeta de Perfil - Layout Horizontal */}
-            <div className="card shadow-lg border-0">
-              <div className="card-header bg-success text-white text-center py-3">
-                <h2 className="mb-0 fw-bold">Mi Perfil</h2>
-              </div>
+          <div className="col-12">
+            {/* Sección "Mi Perfil" con fondo semi-transparente */}
+            <div className="bg-light bg-opacity-10 p-4 rounded-3 mb-4 text-center border border-white border-2">
+              <h2 className="text-white fw-bold mb-0">
+                <i className="fas fa-user-circle me-2"></i>Mi Perfil
+              </h2>
+            </div>
+            
+            {/* Tarjeta de Perfil que ocupa todo el ancho del container */}
+            <div className="card shadow-lg border-0 w-100">
               <div className="card-body p-4">
                 <div className="row">
                   {/* Columna Izquierda - Foto de Perfil */}
                   <div className="col-12 col-md-4 col-lg-3 text-center mb-4 mb-md-0">
                     <div className="position-relative d-inline-block">
-                      {userData.image ? (
+                      {/* Imagen de fondo por defecto */}
+                      <img
+                        src="https://t3.ftcdn.net/jpg/00/64/67/80/360_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"
+                        alt="Foto de perfil por defecto"
+                        className="rounded-circle border border-success border-3"
+                        style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                      />
+                      
+                      {/* Imagen del usuario encima si existe */}
+                      {userData.image && (
                         <img
                           src={userData.image}
                           alt="Foto de perfil"
-                          className="rounded-circle border border-success border-3"
-                          style={{ width: '150px', height: '150px', objectFit: 'cover' }}
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
+                          className="rounded-circle border border-success border-3 position-absolute"
+                          style={{ 
+                            width: '150px', 
+                            height: '150px', 
+                            objectFit: 'cover',
+                            top: '0',
+                            left: '0'
                           }}
                         />
-                      ) : null}
-                      <div 
-                        className={`rounded-circle bg-success d-flex align-items-center justify-content-center ${userData.image ? 'd-none' : ''}`}
-                        style={{ width: '150px', height: '150px' }}
-                      >
-                        <i className="fas fa-user text-white" style={{ fontSize: '4rem' }}></i>
-                      </div>
+                      )}
                     </div>
                     
                     {/* Botón Editar Perfil */}
-                    <div className="mt-3">
+                    <div className="mt-5">
                       <button 
                         className="btn btn-success btn-sm px-3 py-2 fw-bold d-flex align-items-center justify-content-center mx-auto"
                         onClick={() => setShowModal(true)}
                         style={{ minWidth: '120px' }}
                       >
-                        <i className="fas fa-edit me-1000"></i>Editar Perfil
+                        <i className="fas fa-edit me-6"></i>Editar Perfil
                       </button>
                     </div>
                   </div>
@@ -324,7 +438,7 @@ export default function Profile() {
 
                       {/* Primera fila de información */}
                       <div className="col-12 col-lg-6">
-                        <div className="border-start border-success border-4 ps-3">
+                        <div className="bg-light p-3 rounded border-start border-success border-4">
                           <h6 className="text-success fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
                             <i className="fas fa-calendar-alt me-2"></i>Fecha de Nacimiento
                           </h6>
@@ -343,17 +457,17 @@ export default function Profile() {
 
                       {/* Segunda fila de información */}
                       <div className="col-12 col-lg-6">
-                        <div className="border-start border-success border-4 ps-3">
+                        <div className="bg-light p-3 rounded border-start border-success border-4">
                           <h6 className="text-success fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
                             <i className="fas fa-envelope me-2"></i>Correo Electrónico
                           </h6>
-                          <p className="mb-0 text-primary ps-2" style={{ fontSize: '0.95rem' }}>{userData.email}</p>
+                          <p className="mb-0 text-muted ps-2" style={{ fontSize: '0.95rem' }}>{userData.email}</p>
                         </div>
                       </div>
 
                       {/* Tercera fila de información */}
                       <div className="col-12 col-lg-6">
-                        <div className="border-start border-success border-4 ps-3">
+                        <div className="bg-light p-3 rounded border-start border-success border-4">
                           <h6 className="text-success fw-bold mb-1" style={{ fontSize: '0.9rem' }}>
                             <i className="fas fa-phone me-2"></i>Número de Teléfono
                           </h6>
