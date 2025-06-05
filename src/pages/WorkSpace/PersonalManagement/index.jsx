@@ -109,7 +109,7 @@ export default function Index() {
                             </button>
                         </div>
                         <DinamicModal id={rol._id} title={"Eliminar Rol"}>
-                            <p className="text-center mb-4">¿Estas seguro de eliminar el rol del usuario <strong>{rol.user.name} {rol.user.last_name}</strong>?</p>
+                            <p className="text-center mb-4 fs-5">¿Estas seguro de eliminar el rol del usuario <strong>{rol.user.name} {rol.user.last_name}</strong>?</p>
                             <div className="d-flex justify-content-center">
                                 <button className="btn btn-success" onClick={() => handleRemoveRelation(rol._id)}>
                                     Eliminar Rol
