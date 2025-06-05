@@ -128,36 +128,100 @@ export const queryServices = [
 ]
 
 export const queryTypeServices = (objectType) => {
-  return[
-    {
-      "$match": {
-        "_id": objectType
-      }
-    },
-    {
-      "$lookup": {
-        "from": "objects",
-        "localField": "_id",
-        "foreignField": "type",
-        "pipeline": [
-          {
-            "$project": {
-              "name": true,
-              "description": true,
-              "image": true,
-              "props": true
+    return [
+        {
+            "$match": {
+                "_id": objectType
             }
-          }
-        ],
-        "as": "services"
-      }
+        },
+        {
+            "$lookup": {
+                "from": "objects",
+                "localField": "_id",
+                "foreignField": "type",
+                "pipeline": [
+                    {
+                        "$project": {
+                            "name": true,
+                            "description": true,
+                            "image": true,
+                            "props": true
+                        }
+                    }
+                ],
+                "as": "services"
+            }
+        },
+        {
+            "$project": {
+                "name": true,
+                "description": true,
+                "services": true
+            }
+        }
+    ]
+}
+
+export const queryUserRoles = [
+    {
+        "$match": {
+            "type": "has_role",
+            "owner": "6819fccf6b483e8f69f3ca15"
+        }
     },
     {
-      "$project": {
-        "name": true,
-        "description": true,
-        "services": true
-      }
+        "$addFields": {
+            "fromObj": {
+                "$toObjectId": "$from"
+            },
+            "toObj": {
+                "$toObjectId": "$to"
+            }
+        }
+    },
+    {
+        "$lookup": {
+            "from": "users",
+            "localField": "fromObj",
+            "foreignField": "_id",
+            "as": "user",
+            "pipeline": [
+                {
+                    "$project": {
+                        "name": true,
+                        "last_name": true,
+                        "email": true,
+                        "image": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "$unwind": "$user"
+    },
+    {
+        "$lookup": {
+            "from": "objects",
+            "localField": "toObj",
+            "foreignField": "_id",
+            "as": "role",
+            "pipeline": [
+                {
+                    "$project": {
+                        "name": true
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "$unwind": "$role"
+    },
+    {
+        "$project": {
+            "user": true,
+            "role": "$role.name"
+        }
     }
-  ]
-}
+];

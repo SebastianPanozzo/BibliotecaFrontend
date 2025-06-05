@@ -9,7 +9,7 @@ export default function Layout() {
   return (
     <div className="">
       <Menu />
-      <div className="p-4" style={outletStyle}>
+      <div className="p-4 bg-light" style={outletStyle}>
         <Outlet />
       </div>
     </div>
