@@ -102,7 +102,12 @@ const EditProfileModal = ({
         
         setTimeout(() => {
           // Actualizar con la fecha ajustada
-          onUpdate({ ...userData, ...dataToSend });
+          const updatedUser = { 
+            ...userData, 
+            ...dataToSend,
+            token: userData.token // Mantener el token
+          };
+          onUpdate(updatedUser);
           const modal = window.bootstrap.Modal.getInstance(modalRef.current);
           modal.hide();
         }, 2000);
@@ -248,8 +253,8 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Hook para fetch de datos del usuario
-  const { trigger, isMutating } = useFetchData('/api/findObjects');
+  // Hook para fetch de datos del usuario - CORREGIDO: usando /api/findUsers
+  const { trigger, isMutating } = useFetchData('/api/findUsers');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -257,49 +262,50 @@ export default function Profile() {
         setLoading(true);
         setError(null);
 
-        // Obtener el ID del usuario desde localStorage
-        const currentUser = JSON.parse(localStorage.getItem('currentUser')) || get()?.currentUser;
+        // Obtener solo el ID y token del usuario desde localStorage
+        const storedUser = JSON.parse(localStorage.getItem('currentUser'));
         
-        if (!currentUser || !currentUser._id) {
-          throw new Error('No se encontró información del usuario');
+        if (!storedUser || !storedUser._id || !storedUser.token) {
+          throw new Error('No se encontró información de autenticación del usuario');
         }
 
-        // Hacer query al backend para obtener datos actualizados
+        // Hacer query al backend para obtener datos actualizados del usuario
         const response = await trigger({
           method: 'POST',
-          body: queryUserById(currentUser._id)
+          body: queryUserById(storedUser._id),
+          headers: { "Authorization": storedUser.token }
         });
 
+        // Verificar que la respuesta tenga la estructura correcta
         if (response && response.items && response.items.length > 0) {
-          const updatedUserData = {
-            ...response.items[0],
-            token: currentUser.token // Preservar el token de autenticación
+          const backendUserData = response.items[0];
+          
+          // Combinar datos del backend con token del localStorage
+          const completeUserData = {
+            ...backendUserData,
+            token: storedUser.token // Preservar el token de autenticación
           };
           
-          setUserData(updatedUserData);
+          setUserData(completeUserData);
           
-          // Actualizar localStorage y store con los datos frescos del backend
-          localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
-          save({ currentUser: updatedUserData });
+          // Actualizar localStorage con los datos frescos del backend
+          localStorage.setItem('currentUser', JSON.stringify(completeUserData));
+          
+          // Actualizar useStore con los datos frescos
+          save({ currentUser: completeUserData });
         } else {
-          throw new Error('No se encontraron datos del usuario');
+          throw new Error('No se encontraron datos del usuario en el servidor');
         }
       } catch (err) {
         console.error('Error fetching user data:', err);
         setError(err.message);
-        
-        // Como fallback, usar datos del localStorage si existen
-        const currentUser = JSON.parse(localStorage.getItem('currentUser')) || get()?.currentUser;
-        if (currentUser) {
-          setUserData(currentUser);
-        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserData();
-  }, [get, save, trigger]);
+  }, [trigger, save]);
 
   const handleUpdateUser = async (updatedData) => {
     try {
@@ -309,28 +315,12 @@ export default function Profile() {
       // Actualizar estado local inmediatamente
       setUserData(updatedData);
     
-      // Actualizar localStorage
+      // Actualizar localStorage manteniendo la estructura completa
       localStorage.setItem('currentUser', JSON.stringify(updatedData));
     
       // Actualizar useStore
       save({ currentUser: updatedData });
 
-      // Opcionalmente, refrescar datos del backend para asegurar sincronización
-      const response = await trigger({
-        method: 'POST',
-        body: queryUserById(updatedData._id)
-      });
-
-      if (response && response.items && response.items.length > 0) {
-        const freshData = {
-          ...response.items[0],
-          token: updatedData.token
-        };
-      
-        setUserData(freshData);
-        localStorage.setItem('currentUser', JSON.stringify(freshData));
-        save({ currentUser: freshData });
-      }
     } catch (err) {
       console.error('Error updating user data:', err);
     }
@@ -348,7 +338,7 @@ export default function Profile() {
   }
 
   // Mostrar error si no se pudieron cargar los datos
-  if (error && !userData) {
+  if (error) {
     return (
       <div className="bg-light min-vh-100 px-2 bg-spa-img d-flex justify-content-center align-items-center" id="services">
         <div className="alert alert-danger text-center">
@@ -375,13 +365,6 @@ export default function Profile() {
       <div className="container py-5">
         <div className="row justify-content-center">
           <div className="col-12">
-            {/* Sección "Mi Perfil" con fondo semi-transparente */}
-            <div className="bg-light bg-opacity-10 p-4 rounded-3 mb-4 text-center border border-white border-2">
-              <h2 className="text-white fw-bold mb-0">
-                <i className="fas fa-user-circle me-2"></i>Mi Perfil
-              </h2>
-            </div>
-            
             {/* Tarjeta de Perfil que ocupa todo el ancho del container */}
             <div className="card shadow-lg border-0 w-100">
               <div className="card-body p-4">
@@ -421,7 +404,7 @@ export default function Profile() {
                         onClick={() => setShowModal(true)}
                         style={{ minWidth: '120px' }}
                       >
-                        <i className="fas fa-edit me-6"></i>Editar Perfil
+                        <i className="fas fa-edit me-2"></i>Editar Perfil
                       </button>
                     </div>
                   </div>
