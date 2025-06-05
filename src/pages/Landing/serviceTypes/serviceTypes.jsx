@@ -12,6 +12,7 @@ const ServiceTypes = () => {
   const { id } = useParams();
   const [serviceType, setServiceType] = useState(null);
   const [services, setServices] = useState(null);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const { trigger, error, isMutating } = useFetchData(`${id ? '/api/findObjectsTypes' : '/api/findObjects'}`);
 
@@ -24,10 +25,14 @@ const ServiceTypes = () => {
           body: id ? queryTypeServices(id) : queryServices
         });
 
-        const serviceObjectType = id ? res.items[0] : { name: "Servicios", description: "Todos nuestros servicios disponibles" };
-        setServiceType(serviceObjectType);
+        if(res.items.length === 0) setIsEmpty(true);
+
         const services = id ? res.items[0]?.services : res.items;
         setServices(services);
+
+        const serviceObjectType = id ? res.items[0] : { name: "Servicios", description: "Todos nuestros servicios disponibles" };
+        setServiceType(serviceObjectType);
+        
       } catch (err) {
         console.error('Error al hacer la request:', err.message);
       }
@@ -62,7 +67,7 @@ const ServiceTypes = () => {
           </div>
         </div>
       )}
-      {(error || !services && !isMutating) && <Error backgroundImage={img} />}
+      {(error || isEmpty ) && <Error backgroundImage={img} />}
     </>
   );
 };

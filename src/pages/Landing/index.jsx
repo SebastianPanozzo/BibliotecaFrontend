@@ -39,23 +39,6 @@ const LandingLayout = () => {
 
     }, [save, trigger]);
 
-    //Agregar acá lo del carrito
-    useEffect(() => {
-        const currentUser = localStorage.getItem("currentUser");
-        if (currentUser) {
-            save({ currentUser: JSON.parse(currentUser) });
-        }
-
-        const ShopCart = localStorage.getItem("ShopCart");
-        if (ShopCart) {
-            save({ ShopCart: JSON.parse(ShopCart) });
-        } else {
-            localStorage.setItem("ShopCart", JSON.stringify([]));
-            save({ ShopCart: [] });
-        }
-
-    }, [save]);
-
     return (
         <>
             <Header />

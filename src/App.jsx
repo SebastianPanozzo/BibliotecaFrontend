@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import useStore from "./hooks/useStore";
+
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import LandingLayout from "./pages/Landing"
 import Sections from "./pages/Landing/Sections";
@@ -107,6 +110,26 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const { save } = useStore();
+
+  useEffect(() => {
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser) save({ currentUser: JSON.parse(currentUser) });
+
+    const ShopCart = localStorage.getItem("ShopCart");
+    if (ShopCart) {
+      save({ ShopCart: JSON.parse(ShopCart) });
+    } else {
+      localStorage.setItem("ShopCart", JSON.stringify([]));
+      save({ ShopCart: [] });
+    }
+
+    const spaData = sessionStorage.getItem("spaData");
+    if (spaData) {
+      save({ spaData: JSON.parse(spaData) });
+    }
+  }, [save]);
+  
   return <RouterProvider router={router} />;
 }
 

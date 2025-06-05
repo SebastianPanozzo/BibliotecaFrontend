@@ -5,12 +5,12 @@ function useFetchData(url) {
 
     const sendRequest = async (url, { arg }) => {
 
-        const { method, body, headers } = arg;
+        const { method, body, headers, id } = arg;
         if (!method || !body) {
             throw new Error(`Invalid arguments: ${JSON.stringify(arg)}`);
         }
 
-        const response = await fetch(`${API_URL}${url}`, {
+        const response = await fetch(`${API_URL}${url}${id || ""}`, {
             method: method,
             headers: {
                 ...(headers || {}),

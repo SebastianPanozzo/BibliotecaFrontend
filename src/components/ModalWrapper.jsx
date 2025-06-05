@@ -4,19 +4,23 @@ const ModalWrapper = ({ id, title, children, onClose }) => {
   const modalRef = useRef();
 
   useEffect(() => {
-    const modal = new window.bootstrap.Modal(modalRef.current);
+    const modalElement = modalRef.current;
+    const modal = new window.bootstrap.Modal(modalElement);
 
     modal.show();
 
     const handleHide = () => {
-      onClose?.(); // Llama onClose si se pasa
+      onClose?.();
     };
 
-    modalRef.current.addEventListener('hidden.bs.modal', handleHide);
+    modalElement.addEventListener('hidden.bs.modal', handleHide);
 
     return () => {
-      modalRef.current.removeEventListener('hidden.bs.modal', handleHide);
-      modal.hide();
+      // Verificar que el elemento aún existe antes de intentar remover el listener
+      if (modalElement) {
+        modalElement.removeEventListener('hidden.bs.modal', handleHide);
+        modal.hide();
+      }
     };
   }, [onClose]);
 
