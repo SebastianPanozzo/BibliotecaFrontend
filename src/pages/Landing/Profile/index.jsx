@@ -404,7 +404,7 @@ export default function Profile() {
                         onClick={() => setShowModal(true)}
                         style={{ minWidth: '120px' }}
                       >
-                        <i className="fas fa-edit me-2"></i>Editar Perfil
+                        <i className="fas fa-edit me-6"></i>Editar Perfil
                       </button>
                     </div>
                   </div>
@@ -414,8 +414,8 @@ export default function Profile() {
                     <div className="row g-3">
                       {/* Nombre completo - ahora en la primera fila */}
                       <div className="col-12">
-                        <div className="bg-light p-3 rounded border-start border-success border-4">
-                          <h4 className="text-dark fw-bold mb-0">{userData.name} {userData.last_name}</h4>
+                        <div className="bg-light p-4 rounded border-start border-success border-4">
+                          <h4 className="text-dark fw-bold mb-0" style={{ fontSize: '2.5rem' }}>{userData.name} {userData.last_name}</h4>
                         </div>
                       </div>
 
