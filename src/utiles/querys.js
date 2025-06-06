@@ -225,3 +225,32 @@ export const queryUserRoles = [
         }
     }
 ];
+
+export const queryAdminServices = [
+    {
+        "$lookup": {
+            "from": "objecttypes",
+            "localField": "type",
+            "foreignField": "_id",
+            "as": "objectType"
+        }
+    },
+    {
+        "$unwind": "$objectType"
+    },
+    {
+        "$match": {
+            "owner": "6819fccf6b483e8f69f3ca15",
+            "objectType.parent": "service"
+        }
+    },
+    {
+        "$project": {
+            "name": true,
+            "description": true,
+            "image": true,
+            "type": true,
+            "props": true
+        }
+    }
+]

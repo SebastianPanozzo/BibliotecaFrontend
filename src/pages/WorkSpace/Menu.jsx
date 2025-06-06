@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 export default function Menu() {
   const btnList = [
     { name: "Gestion de Turnos", path: "/workspace/appointmentManagement" },
-    { name: "Gestión de Servicios", path: "/workspace/servicesManagement" },
-    { name: "Gestión de Personal", path: "/workspace/personalManagement" },
+    { name: "Administración de Servicios", path: "/workspace/servicesManagement" },
+    { name: "Administración de Personal", path: "/workspace/personalManagement" },
     { name: "Analíticas", path: "/workspace/analytics" },
   ];
   const [btnSelected, setBtnSelected] = useState(btnList[0].name);
