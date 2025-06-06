@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import useStore from '../../../hooks/useStore';
 import useFetchData from '../../../hooks/useFetchData';
+import Appointment from './Appointments';
 
 // Query para obtener datos del usuario por ID
 const queryUserById = (userId) => [
@@ -361,10 +362,10 @@ export default function Profile() {
   }
 
   return (
-    <div className="bg-light min-vh-100 px-2 bg-spa-img" id="services">
+    <div className="min-vh-100 px-2 bg-spa-img" id="services">
       <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-12">
+        <div className="row m-0 justify-content-center mb-2">
+          <div className="col-12 p-0">
             {/* Tarjeta de Perfil que ocupa todo el ancho del container */}
             <div className="card shadow-lg border-0 w-100">
               <div className="card-body p-4">
@@ -415,7 +416,7 @@ export default function Profile() {
                       {/* Nombre completo - ahora en la primera fila */}
                       <div className="col-12">
                         <div className="bg-light p-4 rounded border-start border-success border-4">
-                          <h4 className="text-dark fw-bold mb-0" style={{ fontSize: '2.5rem' }}>{userData.name} {userData.last_name}</h4>
+                          <h3 className="text-dark fw-bold mb-0">{userData.name} {userData.last_name}</h3>
                         </div>
                       </div>
 
@@ -464,6 +465,8 @@ export default function Profile() {
             </div>
           </div>
         </div>
+        <Appointment/>
+
       </div>
 
       {/* Modal de Edición */}
