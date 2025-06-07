@@ -1,51 +1,67 @@
 import { useState } from 'react';
 
-const GetStatus = ({ status }) => {
-    switch (status) {
-        case 'pending':
-            return (
-                <div className='d-flex badge rounded-pill p-2 px-3 bg-warning bg-opacity-75 '>
-                    <i className="bi bi-clock"></i><p className='m-0 ms-2'>Pendiente</p>
-                </div>
-            );
-        case 'inProgress':
-            return (
-                <div className='d-flex badge rounded-pill p-2 px-3 bg-secondary bg-opacity-75 '>
-                    <i className="bi bi-clock-history"></i><p className='m-0 ms-2'>En Proceso</p>
-                </div>
-            );
-        case 'finished':
-            return (
-                <div className='d-flex badge rounded-pill p-2 px-3 bg-success bg-opacity-75'>
-                    <i class="bi bi-check-circle"></i><p className='m-0 ms-2'>Terminado</p>
-                </div>
-            );
-        case 'cancelled':
-            return (
-                <div className='d-flex badge rounded-pill p-2 px-3 bg-danger bg-opacity-75'>
-                    <i className="bi bi-x-circle"></i><p className='m-0 ms-2'>Cancelado</p>
-                </div>
-            );
-        default:
-            return status;
-    }
-}
 
-const formatDate = (fechaIsoUtc) => {
-    const fecha = new Date(fechaIsoUtc);
-    return `${fecha.getDate()} de ${new Intl.DateTimeFormat(`es-Ar`, { month: 'long' }).format(fecha)} de ${fecha.getFullYear()}`
-}
+function AppointmentList({ appointments, error, isMutating }) {
+    const [orderBy, setOrderBy] = useState("createdAt");
 
-const formatTimeRange = (duration) => {
-    const { start, end } = duration;
-    const opciones = { hour: '2-digit', minute: '2-digit', hour12: false };
-    const startHour = new Intl.DateTimeFormat(undefined, opciones).format(new Date(start));
-    const endHour = new Intl.DateTimeFormat(undefined, opciones).format(new Date(end));
-    return `${startHour} - ${endHour}`;
-}
+    const appointmentSorted = appointments?.items?.length > 0 ? orderByStr(orderBy, appointments.items) : [];
 
-export default function DropAppointment({ context }) {
-    const { appointments } = context;
+    return (
+        <div className="row m-0 py-3 card">
+            <div className="col-12">
+                <div className="shadow-sm bg-light p-3 text-success rounded d-flex align-items-center justify-content-between">
+                    <h4>Tu lista de turnos: </h4>
+                    <div className="dropdown-center">
+                        <button className="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Ordenar por:
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li><a className="dropdown-item" href="#" onClick={() => setOrderBy("createdAt")}>Fecha de Creación</a></li>
+                            <li><a className="dropdown-item" href="#" onClick={() => setOrderBy("duration.start")}>Fecha del Turno</a></li>
+                            <li><a className="dropdown-item" href="#" onClick={() => setOrderBy("status")}>Estado del Turno</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {isMutating && (
+                <div className="col-12 mt-3">
+                    <div className="p-5 alert alert-info text-center mb-0 text-info shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Buscando Turnos</p>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {(appointments && !isMutating) && (
+                <div className="col-12">
+                    {appointmentSorted.length > 0 ? (
+                        < DropAppointment appointments={appointmentSorted} />
+                    ) : (
+                        <div className="col-12 mt-3">
+                            <div claclassNamess="p-5 alert alert-warning text-center mb-0 shadow-sm" role="alert">
+                                <p className="fs-6 fw-bold">Lista de turnos vacía</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+            {error && (
+                <div className="col-12 mt-3">
+                    <div className="p-5 alert alert-info text-center mb-0 text-danger shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Error al buscar los turnos</p>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+        </div>
+    );
+};
+
+function DropAppointment({ appointments }) {
     const [openAccordion, setOpenAccordion] = useState();
 
     return (
@@ -137,3 +153,63 @@ export default function DropAppointment({ context }) {
         </div>
     );
 }
+
+const GetStatus = ({ status }) => {
+    switch (status) {
+        case 'pending':
+            return (
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-warning bg-opacity-75 '>
+                    <i className="bi bi-clock"></i><p className='m-0 ms-2'>Pendiente</p>
+                </div>
+            );
+        case 'inProgress':
+            return (
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-secondary bg-opacity-75 '>
+                    <i className="bi bi-clock-history"></i><p className='m-0 ms-2'>En Proceso</p>
+                </div>
+            );
+        case 'finished':
+            return (
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-success bg-opacity-75'>
+                    <i class="bi bi-check-circle"></i><p className='m-0 ms-2'>Terminado</p>
+                </div>
+            );
+        case 'cancelled':
+            return (
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-danger bg-opacity-75'>
+                    <i className="bi bi-x-circle"></i><p className='m-0 ms-2'>Cancelado</p>
+                </div>
+            );
+        default:
+            return status;
+    }
+}
+
+//Funciones
+const formatDate = (fechaIsoUtc) => {
+    const fecha = new Date(fechaIsoUtc);
+    return `${fecha.getDate()} de ${new Intl.DateTimeFormat(`es-Ar`, { month: 'long' }).format(fecha)} de ${fecha.getFullYear()}`
+}
+
+const formatTimeRange = (duration) => {
+    const { start, end } = duration;
+    const opciones = { hour: '2-digit', minute: '2-digit', hour12: false };
+    const startHour = new Intl.DateTimeFormat(undefined, opciones).format(new Date(start));
+    const endHour = new Intl.DateTimeFormat(undefined, opciones).format(new Date(end));
+    return `${startHour} - ${endHour}`;
+}
+
+const getNestedValue = (obj, path) => {
+    return path.split('.').reduce((acc, key) => acc?.[key], obj);
+};
+
+const orderByStr = (orderStr, list) => {
+    return [...list].sort((a, b) => {
+        const valA = String(getNestedValue(a, orderStr) || "");
+        const valB = String(getNestedValue(b, orderStr) || "");
+        return valA.localeCompare(valB);
+    });
+};
+
+
+export default AppointmentList;

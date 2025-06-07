@@ -3,14 +3,8 @@ import useStore from "../../hooks/useStore";
 
 const Header = () => {
     const navigateTo = useNavigate();
-    const { get, remove } = useStore();
+    const { get } = useStore();
     const { currentUser, ShopCart } = get();
-
-    const handleLogout = () => {
-        remove("currentUser")
-        localStorage.removeItem("currentUser");
-        navigateTo('/login');
-    }
 
     return (
         <div className="fixed-top"
@@ -53,8 +47,7 @@ const Header = () => {
                                         {`${ShopCart.length > 0 ? '+' : ''}${ShopCart.length > 0 ?  ShopCart.length : ''}`}<i className="bi bi-cart-check"></i>
                                     </button>
                                     {/* <button className="btn btn-outline-success me-2" type="button" onClick={() => navigateTo('/')}>Mis Turnos</button> */}
-                                    <button className="btn btn-success me-2" type="button" onClick={() => navigateTo('/profile')} >Profile</button>
-                                    <button className="btn btn-success" type="button" onClick={handleLogout} >Salir</button>
+                                    <button className="btn btn-success me-2" type="button" onClick={() => navigateTo('/profile')} >Mi Perfil</button>
                                 </>
                                 :
                                 <>
