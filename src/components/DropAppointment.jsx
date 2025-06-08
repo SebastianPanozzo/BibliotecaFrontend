@@ -4,13 +4,13 @@ const GetStatus = ({ status }) => {
     switch (status) {
         case 'pending':
             return (
-                <div className='d-flex badge rounded-pill p-2 px-3 bg-warning bg-opacity-75 '>
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-warning bg-opacity-75'>
                     <i className="bi bi-clock"></i><p className='m-0 ms-2'>Pendiente</p>
                 </div>
             );
         case 'inProgress':
             return (
-                <div className='d-flex badge rounded-pill p-2 px-3 bg-secondary bg-opacity-75 '>
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-secondary bg-opacity-75'>
                     <i className="bi bi-clock-history"></i><p className='m-0 ms-2'>En Proceso</p>
                 </div>
             );

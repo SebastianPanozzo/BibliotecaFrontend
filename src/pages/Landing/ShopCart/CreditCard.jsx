@@ -15,7 +15,7 @@ export default function CreditCardForm() {
                 {/* Tarjeta a la izquierda */}
                 <div className="col-12 col-lg-6 d-flex justify-content-center m-0 my-5 my-lg-0"
                     style={{
-                        transform: 'scale(1.5)',
+                        transform: 'scale(1)',
                         transformOrigin: 'center',
                     }}>
                     <div>

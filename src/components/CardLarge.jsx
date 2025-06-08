@@ -14,11 +14,9 @@ const CardLarge = ({ context }) => {
             return;
         }
 
-        const ShopCartLS = JSON.parse(localStorage.getItem("ShopCart")) || [];
+        const ShopCartLS = JSON.parse(localStorage.getItem("ShopCart"));
         ShopCartLS.push(context);
         localStorage.setItem("ShopCart", JSON.stringify(ShopCartLS));
-
-        //ShopCart.push(context);
         save({ ShopCart: ShopCartLS });
     };
 
@@ -58,6 +56,11 @@ const CardLarge = ({ context }) => {
                                     </div>
                                 </div>
                                 <div className="d-flex justify-content-center justify-content-md-end align-items-center">
+                                    {/* 
+                                    El boton se debe renderizar condicionalmente si ya está agregado al ShopCart del estado 
+                                    Si el servicio no está, muestra el boton de abajo como está y si ya está en el carrito,
+                                    lo desabilita y cambia el text a "agregado al carrito"
+                                    */}
                                     <button className="btn btn-success" onClick={addToShopCart}>
                                         <i className="bi bi-cart-plus me-2"></i>Agregar al carrito
                                     </button>

@@ -1,26 +1,31 @@
 import { useState } from "react";
 import Calendar from "../../../components/Calendar"
+import useFetchData from "../../../hooks/useFetchData";
 
-export default function CalendarList({ context }) {
-    const { setSelectedDate } = context;
+
+export default function CalendarList({ setValue }) {
     const [date, setDate] = useState();
     console.log("date in calendar", date);
 
-    const getTodayAndNextTwoDaysISO = () => {
-        const today = new Date();
-        return [0, 1, 2].map(offset => {
-            const date = new Date(today);
-            date.setDate(today.getDate() + offset);
-            return date.toISOString();
-        });
+    function getNextBusinessDays() {
+        const businessDays = [];
+        let currentDate = new Date();
+        while (businessDays.length < 3) {
+            const dayOfWeek = currentDate.getDay(); // 0 = domingo, 6 = sábado
+            if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                businessDays.push(new Date(currentDate).toISOString());
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return businessDays;
     }
 
     return (
-        <div className="row">
-            <div className="col-md-6 px-0 pe-md-2 mb-3">
-                <div className="card">
+        <div className="row col-12 m-0 mt-3 p-0">
+            <div className="col-md-6 px-0 pe-md-2 mb-3 mb-md-0 ">
+                <div className="card shadow-sm">
                     <Calendar context={{
-                        events: getTodayAndNextTwoDaysISO(),
+                        events: getNextBusinessDays(),
                         setMonth: null,
                         setDate,
                         date,
@@ -28,13 +33,13 @@ export default function CalendarList({ context }) {
                     }} />
                 </div>
             </div>
-            <div className="col-md-6 px-0 ps-md-2 mb-3">
-                <div className="card p-3" style={{ height: "350px" }}>
+            <div className="col-md-6 px-0 ps-md-2">
+                <div className="card p-3 shadow-sm" style={{ height: "352px" }}>
                     <div className="card shadow-sm p-2 mb-3 bg-success bg-opacity-75 text-white">
                         <h5>Servicios Seleccionados: </h5>
                     </div>
                     <div style={{ flexGrow: 1, overflowY: 'auto' }}>
-                        < Schedules context={{ date, setDate, dates: getTodayAndNextTwoDaysISO() }} />
+                        < Schedules context={{ date, setDate, dates: getNextBusinessDays() }} />
                     </div>
                 </div>
             </div>

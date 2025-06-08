@@ -39,7 +39,7 @@ function AppointmentList({ appointments, error, isMutating }) {
                         < DropAppointment appointments={appointmentSorted} />
                     ) : (
                         <div className="col-12 mt-3">
-                            <div claclassNamess="p-5 alert alert-warning text-center mb-0 shadow-sm" role="alert">
+                            <div className="p-5 alert alert-warning text-center mb-0 shadow-sm" role="alert">
                                 <p className="fs-6 fw-bold">Lista de turnos vacía</p>
                             </div>
                         </div>
@@ -76,17 +76,16 @@ function DropAppointment({ appointments }) {
                             aria-expanded={openAccordion === turno._id}
                             aria-controls={`collapse-${turno._id}`}
                         >
-                            {/* Acá va el botón */}
-                            <div className="row d-flex justify-content-between w-100 me-2">
-                                <div className='col-12'>
-                                    <div className='d-flex align-items-center'>
-                                        <GetStatus status={turno.status} />
-                                        <p className='text-muted m-0 ms-2 lh-base'>Turno creado el {formatDate(turno.createdAt)}</p>
-                                    </div>
-                                    <div className='lh-base mt-2'>
-                                        <p className='m-0 fs-5'><i className="bi bi-calendar3 me-2"></i>{formatDate(turno.duration.start)}</p>
-                                        <p className='m-0 text-muted'><i className="bi bi-clock-fill me-2"></i>{formatTimeRange(turno.duration)}</p>
-                                    </div>
+                            <div className="row col-12 w-100 pe-2"> 
+                                <div className='col-2 d-flex'>
+                                    <GetStatus status={turno.status} />
+                                </div>
+                                <div className='col-12 col-md-10 text-start text-md-end'>
+                                    <p className='text-muted m-0 lh-base'>Turno creado el {formatDate(turno.createdAt)}</p>
+                                </div>
+                                <div className='col-12 lh-base mt-2'>
+                                    <p className='m-0 fs-5'><i className="bi bi-calendar3 me-2"></i>{formatDate(turno.duration.start)}</p>
+                                    <p className='m-0 text-muted'><i className="bi bi-clock-fill me-2"></i>{formatTimeRange(turno.duration)}</p>
                                 </div>
                             </div>
                         </button>

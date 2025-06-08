@@ -344,7 +344,7 @@ export default function Profile() {
   if (error) return <Error backgroundImage={image} />
   if (userData) {
     return (
-      <div className="min-vh-100 px-2 bg-spa-img" id="services">
+      <div className="min-vh-100 pb-2 px-2 bg-spa-img" id="services">
         <div className="container">
           <div className="row m-0 justify-content-center mb-2">
             <div className="col-12 p-0">

@@ -19,6 +19,7 @@ import ServicesManagement from "./pages/WorkSpace/ServicesManagement";
 import Analytics from "./pages/WorkSpace/Analytics";
 
 import Error from "./components/LoadAndErr/Error";
+import Loader from "./components/LoadAndErr/Loader";
 import image from "../public/img/bgDark.webp"
 
 const ProtectedRoute = ({ children }) => {
@@ -54,16 +55,9 @@ const ProtectedRoute = ({ children }) => {
   }, [currentUser?.token]); 
 
   // --- Lógica de Renderizado ---
-  if (isAuthenticated === null) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '24px' }}>
-        Cargando...
-      </div>
-    );
-  }
-
+  if (isAuthenticated === null) return <Loader context={{image}} />
+  if(isAuthenticated === false) return <Navigate to="/login" replace />;
   if (isAuthenticated) return children;
-  return <Navigate to="/login" replace />;
 };
 
 const router = createBrowserRouter([
