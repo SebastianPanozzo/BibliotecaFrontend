@@ -48,11 +48,8 @@ function AppointmentList({ appointments, error, isMutating }) {
             )}
             {error && (
                 <div className="col-12 mt-3">
-                    <div className="p-5 alert alert-info text-center mb-0 text-danger shadow-sm" role="alert">
+                    <div className="p-5 alert alert-danger text-center mb-0 text-danger shadow-sm" role="alert">
                         <p className="fs-6 fw-bold">Error al buscar los turnos</p>
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
                     </div>
                 </div>
             )}

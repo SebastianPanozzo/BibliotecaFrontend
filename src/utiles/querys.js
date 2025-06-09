@@ -254,3 +254,145 @@ export const queryAdminServices = [
         }
     }
 ]
+
+export const getProfessionals = (id) => {
+    return [
+        {
+            "$addFields": {
+                "idStr": {
+                    "$toString": "$_id"
+                }
+            }
+        },
+        {
+            "$lookup": {
+                "from": "relations",
+                "localField": "idStr",
+                "foreignField": "from",
+                "as": "roles",
+                "pipeline": [
+                    {
+                        "$match": {
+                            "type": "has_role"
+                        }
+                    },
+                    {
+                        "$addFields": {
+                            "toObj": {
+                                "$toObjectId": "$to"
+                            }
+                        }
+                    },
+                    {
+                        "$lookup": {
+                            "from": "objects",
+                            "localField": "toObj",
+                            "foreignField": "_id",
+                            "as": "role"
+                        }
+                    },
+                    {
+                        "$unwind": "$role"
+                    },
+                    {
+                        "$match": {
+                            "role.name": "Profesional",
+                            "owner": id
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "$match": {
+                "$expr": {
+                    "$gt": [
+                        {
+                            "$size": "$roles"
+                        },
+                        0
+                    ]
+                }
+            }
+        },
+        {
+            "$project": {
+                "name": true,
+                "last_name": true
+            }
+        }
+    ]
+}
+
+export const getAppointments = (start, end, profesional) => {
+    return [
+        {
+            "$match": {
+                "type": "spa_appointment",
+                "$expr": {
+                    "$and": [
+                        {
+                            "$gte": [
+                                "$duration.start",
+                                {
+                                    "$dateFromString": {
+                                        "dateString": start
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "$lte": [
+                                "$duration.end",
+                                {
+                                    "$dateFromString": {
+                                        "dateString": end
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "$addFields": {
+                "idStr": {
+                    "$toString": "$_id"
+                }
+            }
+        },
+        {
+            "$lookup": {
+                "from": "relations",
+                "localField": "idStr",
+                "foreignField": "to",
+                "as": "assigned_to",
+                "pipeline": [
+                    {
+                        "$match": {
+                            "type": "assigned_to"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "$unwind": "$assigned_to"
+        },
+        {
+            "$match": {
+                "assigned_to": {
+                    "$exists": true
+                },
+                "assigned_to.from": profesional
+            }
+        },
+        {
+            "$project": {
+                "start": "$duration.start",
+                "end": "$duration.end"
+            }
+        }
+    ]
+}

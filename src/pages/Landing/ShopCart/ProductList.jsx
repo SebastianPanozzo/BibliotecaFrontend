@@ -6,15 +6,17 @@ export default function ProductList() {
 
     const removeItem = (index) => {
         ShopCart.splice(index, 1);
-        save({ ShopCart }); //mirar acá despues
+        save({ ShopCart });
         localStorage.setItem("ShopCart", JSON.stringify(ShopCart));
     };
+
+    // Calcula el subtotal
+    const subtotal = ShopCart.reduce((total, item) => total + item.props.price, 0);
 
     return (
         <div className="col-12 p-0">
             {ShopCart.map((item, index) => (
                 <div key={index} className="row col-12 m-0 mt-3 bg-white shadow border rounded p-2 py-3 py-sm-2">
-
                     <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{ height: "100px" }}>
                         <img
                             src={item.image}
@@ -46,6 +48,12 @@ export default function ProductList() {
                     </div>
                 </div>
             ))}
+            {ShopCart.length > 0 && ( 
+                <div className="mt-3 bg-white shadow border rounded p-3 d-flex justify-content-between align-items-center">
+                    <h5 className="m-0 text-success">Subtotal:</h5>
+                    <h5 className="m-0 text-success">$ {subtotal.toLocaleString()}</h5>
+                </div>
+            )}
         </div>
     )
 };
