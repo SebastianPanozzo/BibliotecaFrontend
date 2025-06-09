@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Menu from "./Menu";
+import Menu from "./MenuLateral";
 
 const outletStyle = {
   minHeight: 'calc(100vh - 71px)',
