@@ -8,8 +8,8 @@ import Sections from "./pages/Landing/Sections";
 import Login from "./pages/Login/login";
 import Register from "./pages/Register/Register";
 import ServiceTypes from "./pages/Landing/serviceTypes/serviceTypes";
-import ShopCart from "./pages/Landing/ShopCart/ShopCart";
-import ShopCart2 from "./pages/Landing/ShopCart/ShopCart2";
+import ShopCartOld from "./pages/Landing/ShopCart/ShopCart";
+import ShopCart from "./pages/Landing/ShopCart/ShopCart2";
 import Profile from "./pages/Landing/Profile"
 
 import WorkSpaceLayout from "./pages/WorkSpace";
@@ -90,10 +90,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/shopCart2",
+        path: "/shopCartOld",
         element: (
           <ProtectedRoute>
-            <ShopCart2 />
+            <ShopCartOld />
           </ProtectedRoute>
         ),
       },

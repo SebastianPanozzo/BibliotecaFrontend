@@ -1,62 +1,87 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import useStore from "../../../hooks/useStore";
+import useFetchData from "../../../hooks/useFetchData";
 import ProductList from "./ProductList";
 import CalendarList from "./CalendarList";
 import CreditCard from "./CreditCard";
-const service_unit = import.meta.env.VITE_SPA_ID;
 
-/* 
-    {
-        datetime = date,
-        services = [],
-        professional = id,
-        service_unit = id,
-        pay:{
-            isPaid = true,
-            cradData = {
-                name = name,
-                number = number,
-                expiration = expiration,
-                cvv = cvv
-            }
-            discount = [
-                {    
-                    type: "percentage" | "amount",
-                    value: 10,
-                    reason: "Descuento por fidelidad"
-                }
-            ]
+/* new object
+{
+    "datetime": "2025-06-11T11:00:00.000Z",
+    "professional": "6817ded1a881b7d0a35e25ad",
+    "service_unit": "6819fccf6b483e8f69f3ca15",
+    "isPaid": true,
+    "discount": [
+        {
+            "type": "percentage",
+            "value": 10,
+            "reason": "Descuento por reservar 48h antes: "
         }
+    ],
+    "services": [
+        "681a162abf0d1ef4fb57827b",
+        "681a1d17bf0d1ef4fb57828c"
+    ],
+    "cardData": {
+        "number": "1234567890876878",
+        "name": "joa",
+        "expiry": "12/26",
+        "cvc": "200"
     }
-*/
+} */
 
-// agregar servicios, service_unit  al handlerSubmit
 
 export default function ShopCart2() {
+    const modalRef = useRef(null);
+    const [pay, setPay] = useState();
+    const { trigger, isMutating, error } = useFetchData("/services/createAppointmentNew")
     const navigateTo = useNavigate();
-    const { ShopCart, currentUser: { token }, spaData } = useStore().get();
+    const { save, get } = useStore()
+    const { ShopCart, currentUser: { token }, } = get();
 
     // React hook form
-    const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
         defaultValues: {
             datetime: "",
             professional: "",
-            service_unit: "",
+            service_unit: import.meta.env.VITE_SPA_ID,
             isPaid: false,
             discount: [],
-            cardData: {},
+            services: [],
+            cardData: {
+                number: null,
+                name: "",
+                expiry: "",
+                cvc: ""
+            },
         },
     });
+    const appointmentData = watch()
+    console.log("SapaData: ", { token, appointmentData });
 
     const onSubmit = (data) => {
-        console.log("Formulario enviado", data);
+        console.log("Formulario enviado", { ...data, isPaid: true });
+        const modal = new window.bootstrap.Modal(modalRef.current);
+        modal.show();
     };
 
-    console.log("SapaData: ", { token, useForm: watch() });
-
-    //console.log("Fecha:", selectedDate)
+    const handlePay = async () => {
+        try {
+            const data = await trigger({
+                method: 'POST',
+                body: appointmentData,
+                headers: { "Authorization": token }
+            });
+            setPay(data.ok.message);
+            save({ ShopCart: [] })
+            localStorage.setItem("ShopCart", JSON.stringify([]));
+        } catch (error) {
+            console.log(" de pago: ", error);
+            setPay("Error al realizar el Pago")
+        }
+    }
 
     return (
         <div className="min-vh-100 pb-2 px-2 bg-spa-img" /* id="services" */>
@@ -65,7 +90,7 @@ export default function ShopCart2() {
                     {/*Título de la card */}
                     <div className="col-12 bg-white d-flex justify-content-between align-items-center shadow-sm p-3 rounded border-start border-success border-4">
                         <h4 className="text-success fw-bold mb-0">Hacé tu reservación online</h4>
-                        <h4 className="bg-success rounded text-white p-1 px-3"><i className ="bi bi-send"></i></h4>
+                        <h4 className="bg-success rounded text-white p-1 px-3"><i className="bi bi-send"></i></h4>
                     </div>
                     {/* Carrito de compras */}
                     <div className="row col-12 bg-white m-0 shadow-sm p-3 rounded mt-3">
@@ -87,14 +112,63 @@ export default function ShopCart2() {
                     {ShopCart.length !== 0 && (
                         <CalendarList setValue={setValue} />
                     )}
-
+                    {appointmentData.datetime && ShopCart.length !== 0 && (
+                        <CreditCard
+                            register={register}
+                            setValue={setValue}
+                            watch={watch}
+                            errors={errors}
+                            handleSubmit={handleSubmit}
+                            onSubmit={onSubmit}
+                        />
+                    )}
                 </div>
+            </div>
+            <div class="modal fade" id="miModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true" ref={modalRef}>
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="miModalLabel">Confirmar Pago</h5>
+                        </div>
+                        <div class="modal-body">
+                            {(!isMutating && !pay) && (
+                                <div class="alert alert-info text-center mb-0" role="alert">
+                                    <p className="fs-6">Está seguro que desea realizar el pago?</p>
+                                </div>
+                            )}
+                            {isMutating && (
+                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                    <p className="mb-2 fs-6">Realizando el Pago</p>
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            )}
+                            {pay && !error && (
+                                <div class="alert alert-success text-center mb-0" role="alert">
+                                    <p className="fs-6">{pay}</p>
+                                </div>
+                            )}
+                            {error && !isMutating && (
+                                <div class="alert alert-danger text-center mb-0" role="alert">
+                                    <p className="fs-6">{pay}</p>
+                                </div>
+                            )}
 
-                {/* <div className="row card-custom p-3 mb-3 rounded border border-light-subtle" >
-                    <CreditCard />
-                </div> */}
+                        </div>
+                        <div class={`modal-footer d-flex align-items-center ${pay && !error ? "justify-content-center" : "justify-content-between"}`}>
+                            {pay && !error ? (
+                                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" onClick={() => navigateTo("/profile")}>Ir a mi Perfil</button>
+                            ) : (
+                                <>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-outline-success" onClick={handlePay}>Confirmar</button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
-

@@ -16,7 +16,7 @@ const CalendarComponent = ({ context }) => {
     
     let dates = [];
     if(Array.isArray(events) && events.length > 0){
-        dates = events.map((d) => {return new Date(d).toISOString().split('T')[0]})
+        dates = events.map((d) => {return d.split('T')[0]})
     }
 
     const handelSetMonth = (date) => {
@@ -29,6 +29,7 @@ const CalendarComponent = ({ context }) => {
     };
 
     const handelSetDate = (date) => {
+        console.log("Fechas: ", {date: date, iso: date.toISOString()})
         if(setDate !== null){
             setDate(date)
         }
