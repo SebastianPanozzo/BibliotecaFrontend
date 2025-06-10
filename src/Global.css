@@ -12,3 +12,11 @@
   background-attachment: fixed;
   padding-top: 5rem;
 }
+
+.bg-header-img{
+  background-image: url("../public/img/bgDark.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}

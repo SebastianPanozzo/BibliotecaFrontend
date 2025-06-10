@@ -55,7 +55,7 @@ export default function Index() {
     }
 
     return (
-        <div className="container-fluid py-4">
+        <div className="container-fluid p-0">
             {/* Encabezado y Búsqueda */}
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 p-3 bg-white rounded shadow-sm">
                 <h3 className="mb-3 mb-md-0 text-success fw-bold">Administración de Servicios</h3>

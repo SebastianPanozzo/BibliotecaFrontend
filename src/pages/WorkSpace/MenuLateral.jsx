@@ -20,7 +20,7 @@ export default function Menu() {
   }, [btnSelected]);
 
   return (
-    <nav className="navbar bg-success bg-opacity-25 border-bottom border-success shadow-sm">
+    <nav className="navbar bg-success bg-opacity-25 shadow-sm">
       <div className="container-fluid d-flex justify-content-between align-items-center">
         <a className="navbar-brand d-flex align-items-center text-success fw-bold">
           <img style={{ width: '45px' }} className="me-2" src="/img/planta.png" alt="Logo" />
