@@ -51,7 +51,7 @@ function Services() {
                 scrollMarginTop: '70px',
             }}
         >
-            <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center text-white">
+            <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center text-white px-4 px-md-0">
                 <div className="row text-center mb-4">
                     <h1 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.5rem', fontWeight: "1000" }} className="mt-3">Nuestros Servicios</h1>
                     <p className="fs-5 fw-bolder my-2">Descubre nuestra amplia gama de tratamientos diseñados para rejuvenecer, relajar y revitalizar.</p>
