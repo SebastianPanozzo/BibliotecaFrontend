@@ -24,7 +24,7 @@ function Home() {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             fontSize: "5em",
-                            fontWeight: "700"
+                            fontWeight: "800"
                         }}>
                         {spaData.name}
                     </h1>
@@ -32,7 +32,7 @@ function Home() {
                     <h2 className="fw-bold mb-2 text-white lh-sm mb-3">
                         Descubre la Experiencia de Bienestar Total
                     </h2>
-                    <p className="lead lh-sm text-white mb-4">
+                    <p className="lead lh-sm text-white mb-4 truncate-9-lines">
                         {spaData.description}
 
                     </p>
