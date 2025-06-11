@@ -2,10 +2,10 @@ import team from "../../../../public/img/team.webp"
 function About() {
   return (
     <div className="" id="about" style={{background: 'rgba(87, 184, 42, 0.2)'}}>
-      <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center">
+      <div className="container d-flex flex-column align-items-center justify-content-center px-4 px-md-0" style={{ minHeight: "65dvh" }}>
         <div className="row text-center my-4">
           <h2 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.25rem', fontWeight: "1000" }}
-            className="text-success">
+            className="text-success mb-5">
             Quienes Somos
           </h2>
           <p className="fs-5 fw-bolder">
@@ -14,7 +14,7 @@ function About() {
             reconectar con la naturaleza y encontrar un equilibrio perfecto entre cuerpo y mente.
           </p>
         </div>
-        <div className="row mt-lg-4">
+        <div className="row mt-lg-4 mb-5">
           <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center">
             <img className="img-fluid rounded rounded-4 shadow-sm" src={team} alt="imagen de spa" />
           </div>
