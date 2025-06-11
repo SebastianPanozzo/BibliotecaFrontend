@@ -23,8 +23,7 @@ const Header = () => {
                             Sentirse Bien Spa
                         </a>
                         <button className="navbar-toggler bg-success bg-opacity-50 border-0 p-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            
-                            <i class="bi bi-list-task text-white"></i>
+                            <i className="bi bi-list-task text-white"></i>
                         </button>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">

@@ -15,8 +15,8 @@ const context = {
 
 function Location() {
     return (
-        <div className="py-4 bg-color-1" id="location">
-            <div className="container d-flex flex-column align-items-center justify-content-center px-4 px-md-0" style={{ minHeight: "65dvh" }}>
+        <div className="bg-color-4" id="location">
+            <div className="container py-3 d-flex flex-column align-items-center justify-content-center px-4 px-md-0" style={{ minHeight: "65dvh" }}>
                 <div className="row text-center mb-4">
                     <h2 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.25rem', fontWeight: "1000" }}
                         className="text-success mb-5">
@@ -28,7 +28,7 @@ function Location() {
                         reconectar con la naturaleza y encontrar un equilibrio perfecto entre cuerpo y mente.
                     </p>
                 </div>
-                <div className="row mt-lg-4 col-12 col-lg-10">
+                <div className="row mt-lg-4 col-12">
                     <div className="col-12 col-lg-6 d-flex flex-column align-items-center align-items-lg-start justify-content-between text-center text-lg-start">
                         <div className="mb-4 mb-lg-0">
                             <p className="fs-4 fw-bolder text-success mb-0"><i className="bi bi-tree-fill"></i> Dirección</p>

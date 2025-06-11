@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import Loader from "../../../components/LoadAndErr/Loader";
 import Error from "../../../components/LoadAndErr/Error";
-import image from "../../../../public/img/bgDark.webp"
+import image from "../../../../public/img/bgHome.webp"
 import useStore from '../../../hooks/useStore';
 import useFetchData from '../../../hooks/useFetchData';
 import AppointmentList from "../../../components/AppointmentList";
@@ -344,7 +344,7 @@ export default function Profile() {
   if (error) return <Error backgroundImage={image} />
   if (userData) {
     return (
-      <div className="min-vh-100 pb-2 px-2 bg-spa-img" id="services">
+      <div className="min-vh-100 pb-2 px-2 bg-home-img" id="services">
         <div className="container">
           <div className="row m-0 justify-content-center mb-2">
             <div className="col-12 p-0">
