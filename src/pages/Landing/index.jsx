@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header"
 import Error from "../../components/LoadAndErr/Error";
-import image from "../../../public/img/bgDark.webp"
+import image from "../../../public/img/bgHome.webp"
 import Loader from "../../components/LoadAndErr/Loader";
 import useFetchData from "../../hooks/useFetchData";
 import useStore from "../../hooks/useStore";
