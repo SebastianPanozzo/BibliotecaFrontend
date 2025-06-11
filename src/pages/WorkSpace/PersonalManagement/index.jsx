@@ -55,70 +55,85 @@ export default function Index() {
 
     return (
         <div className="container-fluid p-0">
-            {/* Encabezado y Búsqueda */}
-            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 p-3 bg-white rounded shadow-sm">
-                <h3 className="mb-3 mb-md-0 text-success fw-bold">Administración de Personal</h3>
-                <div className="d-flex w-100 w-md-auto">
-                    <input
-                        type="text"
-                        placeholder="Buscar por nombre, email o rol..."
-                        className="form-control me-2 border-success"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                    <button
-                        className="btn btn-success d-flex align-items-center"
-                        data-bs-toggle="modal"
-                        data-bs-target="#newRoleModal"
-                    >
-                        <i className="bi bi-plus-lg me-2"></i> Nuevo
-                    </button>
+            {/* Encabezado */}
+            <div className="row m-0 mb-3">
+                <div className="col-12 bg-white shadow-sm p-3 rounded border-start border-success border-4">
+                    <h3 className="text-success fw-bold mb-0">Administración de Personal</h3>
+                </div>
+            </div>
+
+            {/* Búsqueda y botón nuevo */}
+            <div className="row m-0 mb-3">
+                <div className="col-12 bg-white shadow-sm p-3 rounded">
+                    <div className="d-flex flex-column flex-md-row gap-3 align-items-center">
+                        <div className="flex-grow-1 w-100">
+                            <input
+                                type="text"
+                                placeholder="Buscar por nombre, email o rol..."
+                                className="form-control border-success"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex-shrink-0">
+                            <button
+                                className="btn btn-success d-flex align-items-center"
+                                data-bs-toggle="modal"
+                                data-bs-target="#newRoleModal"
+                            >
+                                <i className="bi bi-plus-lg me-2"></i> Nuevo
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* Modal para asignar nuevo rol */}
             <AssignRoleModal />
 
-            {/* Lista de Roles */}
-            <div className="row g-3">
-                {isMutating ? ( // If loading
-                    <div className="col-12">
-                        <div className="alert alert-info text-center" role="alert">
-                            <i className="bi bi-arrow-clockwise me-2 spin"></i> Buscando los servicios...
+            {isMutating && (
+                <div className="col-12 mt-3">
+                    <div className="p-5 alert alert-info text-center mb-0 text-info shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Cargando personal</p>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     </div>
-                ) : (
-                    filteredRoles?.length > 0 ? (
-                        filteredRoles.map((rol) => (
-                            <div key={rol._id} className="col-12">
-                                <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between bg-white p-3 rounded shadow-sm border border-success">
-                                    {/* Imagen del Usuario */}
-                                    <div className="mb-3 mb-md-0 me-md-3 text-center" style={{ minWidth: '80px' }}>
+                </div>
+            )}
+
+            {!isMutating && (
+                <div className="row col-12 bg-white m-0 shadow-sm p-3 rounded">
+                    <div className="col-12 p-0 border-bottom border-success border-3 d-flex justify-content-between align-items-center">
+                        <h4 className="text-success fw-bold mb-0 lh-1">Personal del Spa</h4>
+                        <h5 className="bg-success rounded text-white p-2 mb-1 flex-shrink-0">
+                            <i className="bi bi-people"></i> {filteredRoles?.length || 0}
+                        </h5>
+                    </div>
+                    <div className="col-12 p-0">
+                        {filteredRoles?.length > 0 ? (
+                            filteredRoles.map((rol) => (
+                                <div key={rol._id} className="row col-12 m-0 mt-3 bg-white shadow border rounded p-2 py-3 py-sm-2">
+                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{ height: '80px' }}>
                                         <img
-                                            src={rol.user.image || "https://media.istockphoto.com/id/1341046662/vector/picture-profile-icon-human-or-people-sign-and-symbol-for-template-design.jpg?s=612x612&w=0&k=20&c=A7z3OK0fElK3tFntKObma-3a7PyO8_2xxW0jtmjzT78="}
-                                            alt={rol.user.name}
+                                            src={rol.user.image || "https://t3.ftcdn.net/jpg/00/64/67/80/360_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"}
+                                            alt={`${rol.user.name} ${rol.user.last_name}`}
                                             className="rounded-circle border border-success"
-                                            style={{ width: '80px', height: '80px', objectFit: 'cover' }}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         />
                                     </div>
-
-                                    {/* Datos del Usuario */}
-                                    <div className="flex-grow-1 text-center text-md-start mb-3 mb-md-0">
-                                        <h5 className="fw-bold text-success mb-1">{rol.user.name} {rol.user.last_name}</h5>
-                                        <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
-                                            <i className="bi bi-envelope me-1 text-info"></i>{rol.user.email}
+                                    <div className="col-sm-6 col-lg-8 mb-3 mb-sm-0">
+                                        <h5 className="mb-1">{rol.user.name} {rol.user.last_name}</h5>
+                                        <p className="m-0 text-muted">
+                                            <i className="bi bi-envelope me-1"></i>{rol.user.email}
+                                        </p>
+                                        <p className="m-0">
+                                            <span className="badge bg-success bg-opacity-25 text-success">
+                                                <i className="bi bi-person-check me-1"></i>{rol.role}
+                                            </span>
                                         </p>
                                     </div>
-
-                                    {/* Rol Asignado */}
-                                    <div className="text-center text-md-start mb-2 mb-md-0 me-md-3" style={{ minWidth: '120px' }}>
-                                        <span className="badge bg-success p-2">
-                                            <i className="bi bi-person-check me-1"></i> {rol.role}
-                                        </span>
-                                    </div>
-
-                                    {/* Botón Eliminar */}
-                                    <div className="text-center text-md-end">
+                                    <div className="col-sm-4 col-lg-3 d-flex align-items-center justify-content-end p-2 p-sm-0">
                                         <button
                                             className="btn btn-outline-danger btn-sm"
                                             data-bs-toggle="modal"
@@ -159,16 +174,13 @@ export default function Index() {
                                         )}
                                     </DinamicModal>
                                 </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="col-12">
-                            <div className="alert alert-warning text-center" role="alert">
-                                No se encontraron usuarios con roles.
-                            </div>
-                        </div>
-                    ))}
-            </div>
+                            ))
+                        ) : (
+                            <p className="text-center mt-3 text-muted">No se encontraron usuarios con roles.</p>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
