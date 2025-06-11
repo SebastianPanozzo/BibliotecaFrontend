@@ -114,7 +114,7 @@ export default function Index() {
                             filteredServices.map((service) => (
                                 <div key={service._id} className="row col-12 m-0 mt-3 bg-white shadow border rounded p-2 py-3 py-sm-2">
                                     {/* Imagen del servicio */}
-                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{ height: '80px' }}>
+                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{maxHeight: '100px' }}>
                                         <img
                                             src={service.image || "https://energiaelectrica.com.ar/images/default.jpg"}
                                             alt={service.name}
@@ -126,7 +126,9 @@ export default function Index() {
                                     {/* Datos del Servicio */}
                                     <div className="col-sm-6 col-lg-7 mb-3 mb-sm-0">
                                         <h5 className="mb-1 text-success fw-bold">{service.name}</h5>
-                                        <p className="m-0 text-muted mb-2" style={{ fontSize: '0.9rem' }}>{service.description}</p>
+                                        <p className="m-0 text-muted mb-2 text-truncate" title={service.description} style={{ fontSize: '0.9rem' }}>
+                                            {service.description}
+                                        </p>
                                         <div className="d-flex flex-wrap align-items-center">
                                             <span className="badge bg-success me-2 mb-1">{service.type}</span>
                                             <span className="text-muted me-3 mb-1">
@@ -142,7 +144,7 @@ export default function Index() {
 
                                     {/* Botones de acción */}
                                     <div className="col-sm-4 col-lg-4 d-flex align-items-center justify-content-center justify-content-sm-end">
-                                        <div className="d-flex flex-column flex-sm-row">
+                                        <div className="d-flex flex-column flex-sm-row w-100 justify-content-end justify-content-md-ceneter">
                                             <button
                                                 className="btn btn-outline-primary btn-sm mb-2 mb-sm-0 me-sm-2"
                                                 data-bs-toggle="modal"
