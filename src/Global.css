@@ -13,8 +13,8 @@
   padding-top: 5rem;
 }
 
-.bg-header-img{
-  background-image: url("../public/img/bgDark.webp");
+.bg-services-img{
+  background-image: url("../public/img/bgServices2.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

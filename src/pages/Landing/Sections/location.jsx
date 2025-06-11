@@ -15,7 +15,7 @@ const context = {
 
 function Location() {
     return (
-        <div className="py-4" id="location" style={{ background: 'rgba(87, 184, 42, 0.2)' }}>
+        <div className="py-4 bg-color-1" id="location">
             <div className="container d-flex flex-column align-items-center justify-content-center px-4 px-md-0" style={{ minHeight: "65dvh" }}>
                 <div className="row text-center mb-4">
                     <h2 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.25rem', fontWeight: "1000" }}

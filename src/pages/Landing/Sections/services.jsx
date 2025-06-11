@@ -41,16 +41,7 @@ function Services() {
 
 
     return (
-        <div className="bg-light" id="services"
-            style={{
-                backgroundImage: `url(${bgAbout})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundAttachment: "fixed",
-                scrollMarginTop: '70px',
-            }}
-        >
+        <div className="bg-services-img" id="services">
             <div className="container min-vh-100 d-flex flex-column align-items-center justify-content-center text-white px-4 px-md-0">
                 <div className="row text-center mb-4">
                     <h1 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.5rem', fontWeight: "1000" }} className="mt-3">Nuestros Servicios</h1>
