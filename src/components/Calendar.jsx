@@ -12,7 +12,7 @@ const cellClassName = (date, dates, style) => {
 
 const CalendarComponent = ({ context }) => {
     const [localMonth, setLocalMonth] = useState(new Date());
-    const { events, setMonth, date, setDate, style } = context;
+    const { events, setMonth, date, setDate, style, compact} = context;
     
     let dates = [];
     if(Array.isArray(events) && events.length > 0){
@@ -36,13 +36,13 @@ const CalendarComponent = ({ context }) => {
 
     return (
         <Calendar
-            compact
+            compact={compact ?? true}
             bordered
             cellClassName={(d) => cellClassName(d, dates, style)}
             value={date}
             onSelect={handelSetDate}
             onChange={handelSetMonth}
-            style={{ height: '350px' }}
+            style={{ height: compact ? '350px' :"100%" }}
         />
     );
 };

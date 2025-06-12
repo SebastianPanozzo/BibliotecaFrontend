@@ -6,10 +6,10 @@ import AppointmentList from "./AppointmentList";
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 export default function AppointmentManagement() {
+    const [isMobile, setIsMobile] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [month, setMonth] = useState(new Date());
     const [appointments, setAppointments] = useState([]);
-
     const { trigger: getAppointments, isMutating, error } = useFetchData('/api/findEvents');
 
     // Función para obtener turnos
@@ -74,6 +74,21 @@ export default function AppointmentManagement() {
         });
     }, [selectedDate, appointments]);
 
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 750);
+        };
+        
+        // Verificar al montar el componente
+        checkScreenSize();
+        
+        // Escuchar cambios en el tamaño de la ventana
+        window.addEventListener('resize', checkScreenSize);
+        
+        // Limpiar el event listener al desmontar
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
     return (
         <div className="container-fluid p-0">
             {/* Encabezado */}
@@ -83,9 +98,9 @@ export default function AppointmentManagement() {
                 </div>
             </div>
 
-            <div className="row m-0">
+            <div className="row">
                 {/* Columna del Calendario */}
-                <div className="col-lg-6 mb-3">
+                <div className=" mb-3">
                     <div className="card shadow-sm border-0">
                         <div className="card-header bg-white border-bottom border-success border-2">
                             <h5 className="text-success fw-bold mb-0">
@@ -93,14 +108,15 @@ export default function AppointmentManagement() {
                                 Calendario de Turnos
                             </h5>
                         </div>
-                        <div className="card-body p-0">
+                        <div className="card-body p-0 pb-lg-5 px-lg-5">
                             <Calendar
                                 context={{
                                     events: calendarEvents,
                                     setMonth,
                                     date: selectedDate,
                                     setDate: setSelectedDate,
-                                    style: "bg-success bg-opacity-25 fw-bold"
+                                    style: "bg-success bg-opacity-25 fw-bold",
+                                    compact: isMobile
                                 }}
                             />
                         </div>
@@ -108,7 +124,7 @@ export default function AppointmentManagement() {
                 </div>
 
                 {/* Columna de Turnos */}
-                <div className="col-lg-6 mb-3">
+                <div className=" mb-3">
                     <div className="card shadow-sm border-0 h-100">
                         <div className="card-header bg-white border-bottom border-success border-2">
                             <div className="d-flex justify-content-between align-items-center">
