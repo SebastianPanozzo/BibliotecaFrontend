@@ -1,6 +1,6 @@
 import useStore from '../../../hooks/useStore'
-
 import imgBg from '../../../../public/img/bgHome.webp'
+import ChatBot from '../../../components/ChatBot';
 
 function Home() {
     const { get } = useStore();
@@ -46,6 +46,7 @@ function Home() {
                     </div>
                 </div>
             </div>
+            <ChatBot />
         </div>
     );
 }
