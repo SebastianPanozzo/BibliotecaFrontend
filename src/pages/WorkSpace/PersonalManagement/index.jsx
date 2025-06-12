@@ -114,13 +114,23 @@ export default function Index() {
                         {filteredRoles?.length > 0 ? (
                             filteredRoles.map((rol) => (
                                 <div key={rol._id} className="row col-12 m-0 mt-3 bg-white shadow border rounded p-2 py-3 py-sm-2">
-                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{ height: '80px' }}>
-                                        <img
-                                            src={rol.user.image || "https://t3.ftcdn.net/jpg/00/64/67/80/360_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"}
-                                            alt={`${rol.user.name} ${rol.user.last_name}`}
-                                            className="rounded-circle border border-success"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                        />
+                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center align-items-center p-sm-0 mb-3 mb-sm-0" style={{ minHeight: '80px', maxHeight: '100px' }}>
+                                        <div 
+                                            className="rounded-circle border border-success overflow-hidden d-flex justify-content-center align-items-center"
+                                            style={{ 
+                                                width: '80px', 
+                                                height: '80px',
+                                                minWidth: '80px',
+                                                minHeight: '80px'
+                                            }}
+                                        >
+                                            <img
+                                                src={rol.user.image || "https://t3.ftcdn.net/jpg/00/64/67/80/360_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg"}
+                                                alt={`${rol.user.name} ${rol.user.last_name}`}
+                                                className="w-100 h-100"
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                        </div>
                                     </div>
                                     <div className="col-sm-6 col-lg-8 mb-3 mb-sm-0">
                                         <h5 className="mb-1">{rol.user.name} {rol.user.last_name}</h5>
