@@ -2,8 +2,6 @@ import Form from "../../components/Form";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetchData from "../../hooks/useFetchData";
-import bgDark from '../../../public/img/bgDark.webp'
-
 
 function Register() {
   const navigateTo = useNavigate();
@@ -84,14 +82,7 @@ function Register() {
   }
 
   return (
-    <div className=""
-      style={{
-        backgroundImage: `url(${bgDark})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundAttachment: "fixed",
-      }}>
+    <div className="bg-home-img pt-0">
       <div className=" container">
         <div className="row min-vh-100 d-flex justify-content-center align-items-center">
           <div className="col-11 col-md-8 col-lg-5 col-xxl-4">

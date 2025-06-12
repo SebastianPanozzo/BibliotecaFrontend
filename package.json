@@ -12,6 +12,7 @@
     "start": "serve -s dist"
   },
   "dependencies": {
+    "@n8n/chat": "^0.27.1",
     "@react-google-maps/api": "^2.20.6",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
