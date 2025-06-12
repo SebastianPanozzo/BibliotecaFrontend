@@ -31,6 +31,7 @@ export const appointmentQuery = [
         "$project": {
             "status": 1,
             "duration": 1,
+            "description": 1,
             "createdAt": 1,
             "services": "$props.services",
             "professional": "$props.professional",

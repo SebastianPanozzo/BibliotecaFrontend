@@ -7,7 +7,6 @@ import useStore from '../../../hooks/useStore';
 import useFetchData from '../../../hooks/useFetchData';
 import AppointmentList from "../../../components/AppointmentList";
 import { appointmentQuery } from "../../../utiles/querys";
-const storedUser = JSON.parse(localStorage.getItem('currentUser'));
 
 // Componente Modal interno mejorado
 const EditProfileModal = ({
@@ -257,6 +256,7 @@ export default function Profile() {
   // Fech del usuario
   const { trigger, isMutating, error } = useFetchData('/api/findUsers');
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
     const fetchUserData = async () => {
       try {
         const response = await trigger({
@@ -300,6 +300,7 @@ export default function Profile() {
     error: errorInAppointment
   } = useFetchData('/api/findRelations');
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('currentUser'));
     const fetch = async () => {
       try {
         const res = await getAppointment({

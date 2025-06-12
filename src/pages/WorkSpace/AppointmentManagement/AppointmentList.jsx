@@ -5,14 +5,10 @@ function AppointmentList({ appointments, error, isMutating }) {
     const [orderDirection, setOrderDirection] = useState("asc"); // 'asc' para ascendente, 'desc' para descendente
 
     // Utilizamos una variable para el array ordenado que se recalcula cuando cambian las dependencias
-    const appointmentSorted = appointments?.items?.length > 0
-        ? orderByStr(orderBy, appointments.items, orderDirection)
-        : [];
-
-    console.log("appointments:", appointments?.items);
+    const appointmentSorted = appointments?.length > 0 ? orderByStr(orderBy, appointments, orderDirection) : [];
 
     return (
-        <div className="row m-0 py-3 card">
+        <div className="row m-0 py-3 ">
             <div className="col-12">
                 <div className="shadow-sm bg-light p-3 text-success rounded d-flex align-items-center justify-content-between">
                     <h4>Tu lista de turnos: </h4>
@@ -144,7 +140,7 @@ function DropAppointment({ appointments }) {
                             )}
                             {turno.user && (
                                 <div className='card border-0 mb-3 bg-white shadow-sm rounded p-3'>
-                                    <p className='mb-2'>Usuario:</p>
+                                    <h6 className='mb-2'>Usuario:</h6>
                                     <div className='d-flex align-items-center'>
                                         <i className="bi bi-person-circle me-2"></i>
                                         <p className='fs-6'>{turno.user.name} {turno.user.last_name}</p>

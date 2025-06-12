@@ -29,7 +29,6 @@ const CalendarComponent = ({ context }) => {
     };
 
     const handelSetDate = (date) => {
-        console.log("Fechas: ", {date: date, iso: date.toISOString()})
         if(setDate !== null){
             setDate(date)
         }
