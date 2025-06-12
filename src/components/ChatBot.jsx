@@ -6,7 +6,41 @@ export default function ChatBot() {
     useEffect(() => {
         // Inyectar estilos CSS personalizados
         const style = document.createElement('style');
-        style.textContent = `
+        style.textContent = styleChat
+        document.head.appendChild(style);
+
+        createChat({
+            webhookUrl: import.meta.env.VITE_URL_BOT,
+            target: '#n8n-chat',
+            mode: 'window',
+            loadPreviousSession: true,
+            defaultLanguage: 'es',
+            initialMessages: [
+                'Hola! 👋',
+                'En que puedo ayudarte hoy?'
+            ],
+            i18n: {
+                es: {
+                    title: 'Spa Sentirse Bien',
+                    subtitle: "Disponible para ayudarte las 24 horas",
+                    footer: '',
+                    getStarted: 'Comenzar conversación',
+                    inputPlaceholder: 'Ingrese su consulta',
+                },
+            },
+        });
+
+        return () => {
+            document.head.removeChild(style);
+        };
+    }, []);
+
+    return (
+        <div id="n8n-chat"></div>
+    );
+}
+
+const styleChat = `
             :root {
                 --chat--color-primary: #198754;
                 --chat--color-primary-shade-50: #157347;
@@ -62,13 +96,17 @@ export default function ChatBot() {
 
             /* Estilos limpios con solo blancos y verdes */
             .n8n-chat {
-                box-shadow: 0 0.25rem 0.5rem rgba(25, 135, 84, 0.15) !important;
                 border: none !important;
             }
 
             .n8n-chat .n8n-chat-header {
                 box-shadow: none !important;
                 background: linear-gradient(to right, #198754, #20c997) !important;
+                text-align: center important;
+            }
+            
+            .n8n-chat chat-heading {
+                text-align: center !important;
             }
 
             .n8n-chat .n8n-chat-messages {
@@ -138,27 +176,3 @@ export default function ChatBot() {
                 transition: transform 0.15s ease !important;
             }
         `;
-        document.head.appendChild(style);
-
-        createChat({
-            webhookUrl: import.meta.env.VITE_URL_BOT,
-            target: '#n8n-chat',
-            mode: 'window',
-            loadPreviousSession: true,
-            chatTitle: 'Asistente del Spa',
-            chatSubtitle: '¡Hola! ¿En qué puedo ayudarte hoy?',
-            welcomeMessage: 'Bienvenido/a al spa. Estoy aquí para ayudarte con información sobre nuestros servicios, reservas y cualquier consulta que tengas.',
-            getStarted: 'Comenzar conversación',
-            botMessageClasses: 'bot-message',
-            userMessageClasses: 'user-message'
-        });
-
-        return () => {
-            document.head.removeChild(style);
-        };
-    }, []);
-
-    return (
-        <div id="n8n-chat"></div>
-    );
-}
