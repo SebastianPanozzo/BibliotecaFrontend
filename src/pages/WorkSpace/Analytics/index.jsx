@@ -1,20 +1,25 @@
 import { useState, useEffect, useMemo } from "react";
 import useFetchData from "../../../hooks/useFetchData";
 import { analyticsQuery } from "./analyticsQuery";
-
+import DatePickerComponent from "../../../components/Datepicker"
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
 export default function Index() {
+    const now = new Date();
+    const from = new Date(now.getFullYear(), now.getMonth(), 1);
+    const to = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const [fromDate, setFromDate] = useState(from);
+    const [toDate, setToDate] = useState(to);
+    
     const { trigger: getAnalytics, isMutating, error } = useFetchData("/api/findEvents");
     const [data, setData] = useState([]);
-
     useEffect(() => {
         const fetchAllData = async () => {
             try {
                 const [analytics] = await Promise.all([
                     getAnalytics({
                         method: 'POST',
-                        body: analyticsQuery(),
+                        body: analyticsQuery(fromDate, toDate),
                         headers: { "Authorization": currentUser.token }
                     })
                 ]);
@@ -25,7 +30,7 @@ export default function Index() {
         };
 
         fetchAllData();
-    }, [getAnalytics]);
+    }, [fromDate, toDate, getAnalytics]);
 
 
     // Procesamiento de datos para las tarjetas de analíticas
@@ -141,8 +146,9 @@ export default function Index() {
         <div className="container-fluid p-0">
             {/* Encabezado */}
             <div className="row m-0 mb-3">
-                <div className="col-12 bg-white shadow-sm p-3 rounded border-start border-success border-4">
+                <div className="col-12 bg-white shadow-sm p-3 rounded border-start border-success border-4 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-md-between">
                     <h3 className="text-success fw-bold mb-0">Analíticas del Spa</h3>
+                    <DatePickerComponent context={{fromDate, setFromDate, toDate, setToDate}}/>
                 </div>
             </div>
 

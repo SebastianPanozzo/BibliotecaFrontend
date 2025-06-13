@@ -31,6 +31,7 @@ export const appointmentQuery = [
         "$project": {
             "status": 1,
             "duration": 1,
+            "description": 1,
             "createdAt": 1,
             "services": "$props.services",
             "professional": "$props.professional",
@@ -106,7 +107,7 @@ export const queryUserRoles = [
     {
         "$match": {
             "type": "has_role",
-            "owner": "6819fccf6b483e8f69f3ca15"
+            /* "owner": "6819fccf6b483e8f69f3ca15" */
         }
     },
     {
@@ -332,6 +333,69 @@ export const getAppointments = (start, end, profesional) => {
             "$project": {
                 "start": "$duration.start",
                 "end": "$duration.end"
+            }
+        }
+    ]
+}
+
+export const getRolesquery = (userId) => {
+    return [
+        {
+            "$addFields": {
+                "objId": {
+                    "$toObjectId": userId
+                },
+                "strId": {
+                    "$toString": "$_id"
+                }
+            }
+        },
+        {
+            "$match": {
+                "$expr": {
+                    "$eq": [
+                        "$_id",
+                        "$objId"
+                    ]
+                }
+            }
+        },
+        {
+            "$lookup": {
+                "from": "relations",
+                "localField": "strId",
+                "foreignField": "from",
+                "as": "roles",
+                "pipeline": [
+                    {
+                        "$match": {
+                            "type": "has_role"
+                        }
+                    },
+                    {
+                        "$addFields": {
+                            "toObj": {
+                                "$toObjectId": "$to"
+                            }
+                        }
+                    },
+                    {
+                        "$lookup": {
+                            "from": "objects",
+                            "localField": "toObj",
+                            "foreignField": "_id",
+                            "as": "role"
+                        }
+                    },
+                    {
+                        "$unwind": "$role"
+                    }
+                ]
+            }
+        },
+        {
+            "$project": {
+                "roles": "$roles.role"
             }
         }
     ]

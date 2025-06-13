@@ -1,17 +1,42 @@
-export const analyticsQuery = (fromDate, toDate) => {
+export const appointmentsData = (selectedMonth = null, professional) => {
+    const now = new Date();
+    let startDate, endDate;
+
+    if (selectedMonth) {
+        // Si hay un mes seleccionado, obtener turnos de ese mes
+        startDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 1);
+        endDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1);
+    } else {
+        // Por defecto, obtener turnos del mes actual
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    }
 
     return [
+        {
+            "$addFields": {
+                "objId": {
+                    "$toObjectId": professional || "681811fde05125f00b993b0e"
+                }
+            }
+        },
         {
             "$match": {
                 "type": "spa_appointment",
                 "$expr": {
                     "$and": [
                         {
+                            "$eq": [
+                                "$props.professional._id",
+                                "$objId"
+                            ]
+                        },
+                        {
                             "$gte": [
                                 "$duration.start",
                                 {
                                     "$dateFromString": {
-                                        "dateString": fromDate.toISOString()
+                                        "dateString": startDate.toISOString()
                                     }
                                 }
                             ]
@@ -21,7 +46,7 @@ export const analyticsQuery = (fromDate, toDate) => {
                                 "$duration.end",
                                 {
                                     "$dateFromString": {
-                                        "dateString": toDate.toISOString()
+                                        "dateString": endDate.toISOString()
                                     }
                                 }
                             ]
@@ -41,8 +66,7 @@ export const analyticsQuery = (fromDate, toDate) => {
                         "$project": {
                             "name": true,
                             "last_name": true,
-                            "email": true,
-                            "image": true
+                            "email": true
                         }
                     }
                 ]
@@ -54,6 +78,9 @@ export const analyticsQuery = (fromDate, toDate) => {
         {
             "$project": {
                 "status": 1,
+                "description": 1,
+                "duration": 1,
+                "createdAt": 1,
                 "user": 1,
                 "services": "$props.services",
                 "professional": "$props.professional",
@@ -61,4 +88,5 @@ export const analyticsQuery = (fromDate, toDate) => {
             }
         }
     ]
-}
+};
+

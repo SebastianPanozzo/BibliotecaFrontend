@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import DinamicModal from './DinamicModal';
-import useFetchData from "../hooks/useFetchData"
+import DinamicModal from '../../../components/DinamicModal';
+import useFetchData from "../../../hooks/useFetchData"
 
 function AppointmentList({ appointments, error, isMutating }) {
     const [orderBy, setOrderBy] = useState("createdAt");
     const [orderDirection, setOrderDirection] = useState("asc"); // 'asc' para ascendente, 'desc' para descendente
 
     // Utilizamos una variable para el array ordenado que se recalcula cuando cambian las dependencias
-    const appointmentSorted = appointments?.items?.length > 0
-        ? orderByStr(orderBy, appointments.items, orderDirection)
-        : [];
+    const appointmentSorted = appointments?.length > 0 ? orderByStr(orderBy, appointments, orderDirection) : [];
 
     return (
-        <div className="row m-0 py-3 card">
+        <div className="row m-0 py-3 ">
             <div className="col-12">
                 <div className="shadow-sm bg-light p-3 text-success rounded d-flex align-items-center justify-content-between">
                     <h4>Tu lista de turnos: </h4>
@@ -43,7 +41,7 @@ function AppointmentList({ appointments, error, isMutating }) {
                     </div>
                 </div>
             )}
-            {(appointments && !isMutating) && (
+            {(!error && !isMutating) && (
                 <div className="col-12">
                     {appointmentSorted.length > 0 ? (
                         < DropAppointment appointments={appointmentSorted} />
@@ -63,15 +61,13 @@ function AppointmentList({ appointments, error, isMutating }) {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };
 
 function DropAppointment({ appointments }) {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [openAccordion, setOpenAccordion] = useState();
-    const { trigger, error, isMutating } = useFetchData("/api/updateEvent");
-    const [update, setUpdate] = useState();
 
     function total(reserva) {
         const subtotal = reserva.services.reduce((total, servicio) => {
@@ -98,21 +94,6 @@ function DropAppointment({ appointments }) {
 
         totalConDescuentos = Math.max(0, totalConDescuentos);
         return totalConDescuentos;
-    }
-
-    const cancelTurno = async (id) => {
-        try {
-            await trigger({
-                method: 'PUT',
-                id: `/${id}`,
-                body: { "status": "cancelled" },
-                headers: { "Authorization": currentUser.token }
-            });
-            setUpdate("Turno cancelado con exito");
-            setTimeout(() => window.location.reload(), 1500); // Recargar para ver los cambios
-        } catch (error) {
-            console.error("Error al eliminar el servicio:", error);
-        }
     }
 
     return (
@@ -161,7 +142,7 @@ function DropAppointment({ appointments }) {
                             )}
                             {turno.user && (
                                 <div className='card border-0 mb-3 bg-white shadow-sm rounded p-3'>
-                                    <p className='mb-2'>Usuario:</p>
+                                    <h6 className='mb-2'>Usuario:</h6>
                                     <div className='d-flex align-items-center'>
                                         <i className="bi bi-person-circle me-2"></i>
                                         <p className='fs-6'>{turno.user.name} {turno.user.last_name}</p>
@@ -248,57 +229,153 @@ function DropAppointment({ appointments }) {
                             </div>
                             <div className='col-12 d-flex justify-content-center justify-content-md-end align-items-center border-top border-2 mt-3'>
                                 {turno.status === 'pending' ? (
-                                    <button
-                                        className='btn btn-danger btn-sm mt-2'
-                                        data-bs-toggle="modal"
-                                        data-bs-target={`#${turno._id}`}
-                                    >Cancelar Turno</button>
+                                    <div className='d-flex'>
+                                        <button
+                                            data-bs-toggle="modal"
+                                            data-bs-target={`#finished-${turno._id}`}
+                                            className='btn btn-success mt-2 me-2'
+                                        >Finalizar Atención</button>
+                                        <button
+                                            data-bs-toggle="modal"
+                                            data-bs-target={`#cancelled-${turno._id}`}
+                                            className='btn btn-danger mt-2'
+                                        >Cancelar Atención</button>
+                                    </div>
                                 ) : turno.status === 'cancelled' ? (
                                     <button disabled className='btn btn-danger btn-sm mt-2'>Turno Cancelado</button>
+                                ) : turno.status === 'finished' ? (
+                                    <button disabled className='btn btn-success btn-sm mt-2'>Atención finalizada</button>
                                 ) : null}
                             </div>
                         </div>
                     </div>
-                    <DinamicModal title={"Cancelar el turno"} id={turno._id}>
-                        <div className='text-center'>
-                            <p className='fs-5'>¿Estás seguro de cancelar el turno?</p>
-                            <p>El turno se cancelará y no se podrá modificar.</p>
-                            <small></small>
-                        </div>
-                        {isMutating && (
-                            <div className="col-12 mt-3">
-                                <div className="p-4 alert alert-warning text-center mb-0 text-warning shadow-sm" role="alert">
-                                    <p className="fs-6 fw-bold mb-3">Actualizando el estado del turno...</p>
-                                    <div className="spinner-border" role="status">
-                                        <span className="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                        {error && (
-                            <div className="col-12 mt-3">
-                                <div className="p-5 alert alert-danger text-center mb-0 text-danger shadow-sm" role="alert">
-                                    <p className="fs-6 fw-bold">Error al cancelar el turno</p>
-                                </div>
-                            </div>
-                        )}
-                        {update && (
-                            <div className="col-12 mt-3">
-                                <div className="p-5 alert alert-success text-center mb-0 text-success shadow-sm" role="alert">
-                                    <p className="fs-6 fw-bold">{update}</p>
-                                </div>
-                            </div>
-                        )}
-                        <div className='d-flex justify-content-between mt-3'>
-                            <button className='btn btn-primary' data-bs-dismiss="modal">No cancelar</button>
-                            <button className='btn btn-danger' onClick={() => cancelTurno(turno._id)}>Cancelar Turno</button>
-                        </div>
+                    <DinamicModal id={`finished-${turno._id}`} title={"Finalizar Atención"}>
+                        <FinishedModal appointmentId={turno._id} />
+                    </DinamicModal>
+                    <DinamicModal id={`cancelled-${turno._id}`} title={"Cancelar Atención"}>
+                        <CanceledModal appointmentId={turno._id} />
                     </DinamicModal>
                 </div>
             ))}
         </div>
     );
 }
+
+const FinishedModal = ({ appointmentId }) => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const [update, setUpdate] = useState(false);
+    const { trigger, error, isMutating } = useFetchData("/api/updateEvent");
+    const [input, setInput] = useState('');
+
+    const handlerFinished = async () => {
+        try {
+            await trigger({
+                method: 'PUT',
+                id: `/${appointmentId}`,
+                body: { "status": "finished", "description": input },
+                headers: { "Authorization": currentUser.token }
+            });
+            setUpdate(true);
+            setTimeout(() => window.location.reload(), 1500); // Recargar para ver los cambios
+        } catch (error) {
+            console.error("Error al finalizar la atención:", error);
+        }
+    }
+
+    return (
+        <div className=''>
+            <h6 className='mb-2'>Observación:</h6>
+            <textarea
+                className='form-control '
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+            ></textarea>
+            {isMutating && (
+                <div className="col-12 mt-2">
+                    <div className="p-4 alert alert-warning text-center mb-0 text-warning shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold mb-3">Actualizando el estado del turno...</p>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {error && (
+                <div className="col-12 mt-2">
+                    <div className="p-5 alert alert-danger text-center mb-0 text-danger shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Error al finalizar la atención</p>
+                    </div>
+                </div>
+            )}
+            {update && (
+                <div className="col-12 mt-2">
+                    <div className="p-5 alert alert-success text-center mb-0 text-success shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Atención finalizada</p>
+                    </div>
+                </div>
+            )}
+            <button className='btn btn-outline-success mt-2 w-100' onClick={handlerFinished}>Finalizar Atención</button>
+        </div>
+    );
+};
+
+const CanceledModal = ({ appointmentId }) => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const [update, setUpdate] = useState(false);
+    const { trigger, error, isMutating } = useFetchData("/api/updateEvent");
+    const [input, setInput] = useState('');
+
+    const handlerFinished = async () => {
+        try {
+            await trigger({
+                method: 'PUT',
+                id: `/${appointmentId}`,
+                body: { "status": "cancelled", "description": input },
+                headers: { "Authorization": currentUser.token }
+            });
+            setUpdate(true);
+            setTimeout(() => window.location.reload(), 1500); // Recargar para ver los cambios
+        } catch (error) {
+            console.error("Error al finalizar la atención:", error);
+        }
+    }
+
+    return (
+        <div className=''>
+            <h6 className='mb-2'>Observación:</h6>
+            <textarea
+                className='form-control '
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+            ></textarea>
+            {isMutating && (
+                <div className="col-12 mt-2">
+                    <div className="p-4 alert alert-warning text-center mb-0 text-warning shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold mb-3">Actualizando el estado del turno...</p>
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {error && (
+                <div className="col-12 mt-2">
+                    <div className="p-5 alert alert-danger text-center mb-0 text-danger shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Error al cancelar la atención</p>
+                    </div>
+                </div>
+            )}
+            {update && (
+                <div className="col-12 mt-2">
+                    <div className="p-5 alert alert-success text-center mb-0 text-success shadow-sm" role="alert">
+                        <p className="fs-6 fw-bold">Atención cancelada</p>
+                    </div>
+                </div>
+            )}
+            <button className='btn btn-outline-danger mt-2 w-100' onClick={handlerFinished}>Cancelar Atención</button>
+        </div>
+    );
+};
 
 const GetStatus = ({ status }) => {
     switch (status) {

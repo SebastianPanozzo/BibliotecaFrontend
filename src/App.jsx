@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { jwtDecode } from 'jwt-decode';
 import useStore from "./hooks/useStore";
+import useFetchData from "./hooks/useFetchData";
 
 import LandingLayout from "./pages/Landing"
 import Sections from "./pages/Landing/Sections";
 import Login from "./pages/Login/login";
 import Register from "./pages/Register/Register";
 import ServiceTypes from "./pages/Landing/serviceTypes/serviceTypes";
-import ShopCartOld from "./pages/Landing/ShopCart/ShopCart";
 import ShopCart from "./pages/Landing/ShopCart/ShopCart2";
 import Profile from "./pages/Landing/Profile"
 
 import WorkSpaceLayout from "./pages/WorkSpace";
+import WorkspaceHome from "./pages/WorkSpace/WorkspaceHome";
 import AppointmentManagement from "./pages/WorkSpace/AppointmentManagement";
 import PersonalManagement from "./pages/WorkSpace/PersonalManagement";
 import ServicesManagement from "./pages/WorkSpace/ServicesManagement";
@@ -20,26 +21,28 @@ import Analytics from "./pages/WorkSpace/Analytics";
 
 import Error from "./components/LoadAndErr/Error";
 import Loader from "./components/LoadAndErr/Loader";
-import image from "../public/img/bgDark.webp"
+import image from "../public/img/bgHome.webp"
+
+import { getRolesquery } from "./utiles/querys"
 
 const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null); 
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
     const validateToken = async () => {
       if (!currentUser || !currentUser.token) {
-        setIsAuthenticated(false); 
+        setIsAuthenticated(false);
         return;
       }
 
       try {
         const decodedToken = jwtDecode(currentUser.token);
-        const currentTime = Date.now() / 1000; 
+        const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
           console.warn("El JWT ha expirado");
-          setIsAuthenticated(false); 
+          setIsAuthenticated(false);
           localStorage.removeItem("currentUser");
           return;
         }
@@ -52,13 +55,40 @@ const ProtectedRoute = ({ children }) => {
     };
 
     validateToken();
-  }, [currentUser?.token]); 
+  }, [currentUser?.token]);
 
   // --- Lógica de Renderizado ---
-  if (isAuthenticated === null) return <Loader context={{image}} />
-  if(isAuthenticated === false) return <Navigate to="/login" replace />;
+  if (isAuthenticated === null) return <Loader context={{ image }} />
+  if (isAuthenticated === false) return <Navigate to="/login" replace />;
   if (isAuthenticated) return children;
 };
+
+const RequireRole = ({ children }) => {
+  const { save, get } = useStore();
+  const { currentUser, roles } = get()
+  const { trigger, isMutating, error } = useFetchData("/api/findUsers")
+
+  const fetchRoles = async () => {
+    const res = await trigger({
+      method: 'POST',
+      body: getRolesquery(currentUser._id),
+      headers: { "Authorization": currentUser.token }
+    });
+    save({ roles: res.items?.[0]?.roles });
+  }
+
+  useEffect(() => {
+    if(!roles){
+      fetchRoles()
+    }
+  }, [currentUser]);
+
+  if (isMutating || !roles) return <Loader context={{ image }} />;
+
+  if (error || roles.length === 0) return <Navigate to="/" replace />;
+
+  return children;
+}
 
 const router = createBrowserRouter([
   {
@@ -90,14 +120,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/shopCartOld",
-        element: (
-          <ProtectedRoute>
-            <ShopCartOld />
-          </ProtectedRoute>
-        ),
-      },
-      {
         path: "/profile",
         element: (
           <ProtectedRoute>
@@ -111,10 +133,16 @@ const router = createBrowserRouter([
     path: "/workspace",
     element: (
       <ProtectedRoute>
-        <WorkSpaceLayout />
+        <RequireRole>
+          <WorkSpaceLayout />
+        </RequireRole>
       </ProtectedRoute>
     ),
     children: [
+      {
+        path: "/workspace",
+        element: <WorkspaceHome />,
+      },
       {
         path: "/workspace/appointmentManagement",
         element: <AppointmentManagement />,

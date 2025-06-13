@@ -4,7 +4,7 @@ import useFetchData from "../../../hooks/useFetchData";
 import CardLarge from "../../../components/CardLarge";
 import Error from "../../../components/LoadAndErr/Error";
 import Loader from "../../../components/LoadAndErr/Loader";
-import img from "../../../../public/img/bgAbout.webp";
+import img from "../../../../public/img/bgServices.webp";
 
 import { queryServices, queryTypeServices } from "../../../utiles/querys"
 

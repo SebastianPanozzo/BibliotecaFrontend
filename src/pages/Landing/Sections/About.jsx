@@ -2,8 +2,8 @@ import team from "../../../../public/img/team.webp"
 function About() {
   return (
     <div className="bg-color-1" id="about">
-      <div className="container d-flex flex-column align-items-center justify-content-center px-4 px-md-0" style={{ minHeight: "65dvh" }}>
-        <div className="row text-center my-4">
+      <div className="container d-flex flex-column align-items-center justify-content-center px-4 py-md-5 px-md-0" style={{ minHeight: "65dvh" }}>
+        <div className="row text-center py-5">
           <h2 style={{ fontFamily: 'Lato, sans-serif', fontSize: '3.25rem', fontWeight: "1000" }}
             className="color-4 mb-4">
             Quienes Somos

@@ -36,12 +36,14 @@ export default function CalendarList({ setValue }) {
 
     function getNextBusinessDays() {
         const businessDays = [];
-        //let currentDate = new Date(new Date().setHours(new Date().getHours() - 3));
-        let currentDate = new Date();
+        //const date = new Date().toISOString().split("T")[0];
+        let date = new Date(new Date().setHours(new Date().getHours() - 3)).toISOString().split("T")[0];
+        let currentDate = new Date(date);
+        
         while (businessDays.length < 3) {
             const dayOfWeek = currentDate.getDay();
-            //console.log("dayOfWeek",{dayOfWeek, currentDate});
-            if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+            //console.log("dayOfWeek",{dayOfWeek, currentDate: currentDate.toISOString()});
+            if (dayOfWeek !== 5 && dayOfWeek !== 6) {
                 businessDays.push(currentDate.toISOString());
             }
             currentDate.setDate(currentDate.getDate() + 1);
@@ -167,15 +169,25 @@ function TimeButtons({ date, professionalSelected, setValue }) {
         const servicesList = ShopCart.map(service => service._id);
         const selectedDateTime = new Date(date);
         selectedDateTime.setHours(hours, minutes, 0, 0);
+
         setValue('datetime', selectedDateTime.toISOString());
         setValue('professional', professionalSelected._id);
         setValue('services', servicesList);
-        if (new Date().getDay() <= selectedDateTime.getDay() - 2) {
+
+        // Obtener la fecha actual a las 00:00:00 en UTC
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+
+        // Calcular diferencia en días
+        const timeDifference = selectedDateTime - today;
+        const twoDaysInMs = 2 * 24 * 60 * 60 * 1000;
+
+        if (timeDifference >= twoDaysInMs) {
             setValue('discount', [
                 {
                     type: "percentage",
-                    value: 10,
-                    reason: "Descuento por reservar 48h antes: "
+                    value: 15,
+                    reason: "Descuento por reservar con 2 días de anticipación: "
                 }
             ]);
         } else {

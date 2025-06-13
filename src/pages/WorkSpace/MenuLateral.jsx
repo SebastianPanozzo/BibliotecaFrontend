@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useStore from "../../hooks/useStore";
 
 export default function Menu() {
+  const { roles } = useStore().get();
+
   const btnList = [
-    { name: "Gestión de Turnos", path: "/workspace/appointmentManagement", icon: "bi-calendar3" },
-    { name: "Analíticas", path: "/workspace/analytics", icon: "bi-graph-up" },
-    { name: "Administración de Personal", path: "/workspace/personalManagement", icon: "bi-person-vcard" },
-    { name: "Administración de Servicios", path: "/workspace/servicesManagement", icon: "bi-stars" },
+    { name: "Gestión de Turnos", path: "/workspace/appointmentManagement", icon: "bi-calendar3", role: "Profesional" },
+    { name: "Analíticas", path: "/workspace/analytics", icon: "bi-graph-up", role: "Administrador" },
+    { name: "Administración de Personal", path: "/workspace/personalManagement", icon: "bi-person-vcard", role: "Administrador" },
+    { name: "Administración de Servicios", path: "/workspace/servicesManagement", icon: "bi-stars", role: "Administrador" },
   ];
 
   const navigateTo = useNavigate();
@@ -52,20 +55,25 @@ export default function Menu() {
           <div className="offcanvas-body px-3 d-flex flex-column justify-content-between h-100">
             <div>
               {/* Botones del menú principal */}
-              {btnList.map((btn, idx) => (
-                <button
-                  key={idx}
-                  className={`btn w-100 mb-2 d-flex align-items-center justify-content-start px-3 border border-success 
-                    ${btn.name === btnSelected ? "bg-success text-white" : "bg-white text-success"}`}
-                  onClick={() => {
-                    setBtnSelected(btn.name);
-                    navigateTo(btn.path);
-                  }}
-                >
-                  <i className={`bi ${btn.icon} me-3`}></i>
-                  {btn.name}
-                </button>
-              ))}
+              {btnList
+                .filter(btn => {
+                  // Mostrar si no requiere rol o si el usuario tiene ese rol
+                  return !btn.role || roles?.some(role => role.name === btn.role);
+                })
+                .map((btn, idx) => (
+                  <button
+                    key={idx}
+                    className={`btn w-100 mb-2 d-flex align-items-center justify-content-start px-3 border border-success 
+        ${btn.name === btnSelected ? "bg-success text-white" : "bg-white text-success"}`}
+                    onClick={() => {
+                      setBtnSelected(btn.name);
+                      navigateTo(btn.path);
+                    }}
+                  >
+                    <i className={`bi ${btn.icon} me-3`}></i>
+                    {btn.name}
+                  </button>
+                ))}
             </div>
 
             {/* Botón de Home en la parte inferior */}

@@ -229,7 +229,7 @@ const AssignRoleModal = () => {
                         {
                             "$match": {
                                 "type": "role",
-                                "owner": "6819fccf6b483e8f69f3ca15"
+                                /* "owner": "6819fccf6b483e8f69f3ca15" */
                             }
                         }
                     ],
