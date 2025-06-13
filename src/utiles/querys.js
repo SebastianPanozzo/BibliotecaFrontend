@@ -337,3 +337,66 @@ export const getAppointments = (start, end, profesional) => {
         }
     ]
 }
+
+export const getRolesquery = (userId) => {
+    return [
+        {
+            "$addFields": {
+                "objId": {
+                    "$toObjectId": userId
+                },
+                "strId": {
+                    "$toString": "$_id"
+                }
+            }
+        },
+        {
+            "$match": {
+                "$expr": {
+                    "$eq": [
+                        "$_id",
+                        "$objId"
+                    ]
+                }
+            }
+        },
+        {
+            "$lookup": {
+                "from": "relations",
+                "localField": "strId",
+                "foreignField": "from",
+                "as": "roles",
+                "pipeline": [
+                    {
+                        "$match": {
+                            "type": "has_role"
+                        }
+                    },
+                    {
+                        "$addFields": {
+                            "toObj": {
+                                "$toObjectId": "$to"
+                            }
+                        }
+                    },
+                    {
+                        "$lookup": {
+                            "from": "objects",
+                            "localField": "toObj",
+                            "foreignField": "_id",
+                            "as": "role"
+                        }
+                    },
+                    {
+                        "$unwind": "$role"
+                    }
+                ]
+            }
+        },
+        {
+            "$project": {
+                "roles": "$roles.role"
+            }
+        }
+    ]
+}

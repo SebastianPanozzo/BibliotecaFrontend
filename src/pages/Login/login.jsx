@@ -12,7 +12,7 @@ function Login() {
   const [acces, setAcces] = useState();
 
   const { trigger, error } = useFetchData("/loginUser");
-  const { save } = useStore();
+  const { save, get } = useStore();
 
   useEffect(() => {
     if (data) {
@@ -21,16 +21,10 @@ function Login() {
       const fetch = async () => {
         try {
           const res = await trigger({ method: "POST", body: data });
-          console.log("res user: ", res)
           if (res) {
             const currentUser = res.ok.data;
-            console.log("respuesta: ", currentUser)
-            localStorage.removeItem('currentUser'); // limpio todo primero
-            save({ currentUser }); // actualizo store
-            localStorage.setItem('currentUser', JSON.stringify(currentUser)); // seteo nuevo
-
-
-            console.log("currentUser: ", localStorage.getItem("currentUser"))
+            save({ currentUser }); 
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
             setButtonState("Enviar");
             setAcces("Login exitoso");

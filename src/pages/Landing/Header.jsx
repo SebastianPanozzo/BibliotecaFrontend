@@ -1,10 +1,31 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useStore from "../../hooks/useStore";
+import useFetchData from "../../hooks/useFetchData";
+import { getRolesquery } from "../../utiles/querys"
+
 
 const Header = () => {
     const navigateTo = useNavigate();
-    const { get } = useStore();
-    const { currentUser, ShopCart } = get();
+    const { trigger } = useFetchData("/api/findUsers")
+    const { get, save } = useStore();
+    const { currentUser, ShopCart, roles } = get();
+
+    const fetchRoles = async () => {
+        const res = await trigger({
+            method: 'POST',
+            body: getRolesquery(currentUser._id),
+            headers: { "Authorization": currentUser.token }
+        });
+        save({ roles: res.items?.[0]?.roles });
+    }
+
+    useEffect(() => {
+        if(currentUser){
+            fetchRoles();
+        }
+    }, [currentUser])
+
 
     return (
         <div className="fixed-top"
@@ -19,7 +40,7 @@ const Header = () => {
                 <nav className="navbar navbar-expand-lg">
                     <div className="container-fluid ">
                         <a className="navbar-brand fw-bolder fs-5 text-white" href="#home" onClick={() => navigateTo('/#home')}>
-                            <img style={{width: '45px'}} className="me-2" src="/img/planta.png" alt="Logo" />
+                            <img style={{ width: '45px' }} className="me-2" src="/img/planta.png" alt="Logo" />
                             Sentirse Bien Spa
                         </a>
                         <button className="navbar-toggler bg-success bg-opacity-50 border-0 p-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,10 +65,12 @@ const Header = () => {
                             {currentUser ?
                                 <>
                                     <button className="btn btn-outline-light me-2 px-5" type="button" onClick={() => navigateTo('/shopCart')}>
-                                        {`${ShopCart.length > 0 ? '+' : ''}${ShopCart.length > 0 ?  ShopCart.length : ''}`}<i className="bi bi-cart-check"></i>
+                                        {`${ShopCart.length > 0 ? '+' : ''}${ShopCart.length > 0 ? ShopCart.length : ''}`}<i className="bi bi-cart-check"></i>
                                     </button>
-                                    {/* <button className="btn btn-outline-success me-2" type="button" onClick={() => navigateTo('/')}>Mis Turnos</button> */}
                                     <button className="btn btn-success me-2" type="button" onClick={() => navigateTo('/profile')} >Mi Perfil</button>
+                                    {roles && roles.length !== 0 && (
+                                        <button className="btn btn-outline-success" type="button" onClick={() => navigateTo('/workspace')}>Workspace</button>
+                                    )}
                                 </>
                                 :
                                 <>
