@@ -1,8 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import useFetchData from "../../../hooks/useFetchData";
 import { analyticsQuery } from "./analyticsQuery";
 import DatePickerComponent from "../../../components/Datepicker"
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+import html2pdf from "html2pdf.js";
 
 export default function Index() {
     const now = new Date();
@@ -10,7 +11,7 @@ export default function Index() {
     const to = new Date(now.getFullYear(), now.getMonth() + 1, 1);
     const [fromDate, setFromDate] = useState(from);
     const [toDate, setToDate] = useState(to);
-    
+
     const { trigger: getAnalytics, isMutating, error } = useFetchData("/api/findEvents");
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -142,13 +143,29 @@ export default function Index() {
         };
     }, [data]);
 
+    const handleDownloadPDF = () => {
+        const element = sectionRef.current;
+
+        const opt = {
+            margin: 0.5,
+            filename: 'mi-seccion.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    };
+    const sectionRef = useRef();
+
+
     return (
-        <div className="container-fluid p-0">
+        <div ref={sectionRef} className="container-fluid p-0">
             {/* Encabezado */}
             <div className="row m-0 mb-3">
                 <div className="col-12 bg-white shadow-sm p-3 rounded border-start border-success border-4 d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-md-between">
                     <h3 className="text-success fw-bold mb-0">Analíticas del Spa</h3>
-                    <DatePickerComponent context={{fromDate, setFromDate, toDate, setToDate}}/>
+                    <DatePickerComponent context={{ fromDate, setFromDate, toDate, setToDate }} />
                 </div>
             </div>
 
@@ -182,7 +199,7 @@ export default function Index() {
                                             <i className="bi bi-calendar-check fs-1 m-2"></i>
                                         </div>
                                         <div className="d-flex flex-column align-items-between lh-sm">
-                                            <p className="text-uppercase fw-bolder text-muted fs-6">Turnos del Mes</p>
+                                            <p className="text-uppercase fw-bolder text-muted fs-6">Número de turnos</p>
                                             <p className="fw-bold text-dark fs-3">{totalAppointments}</p>
                                         </div>
                                     </div>
@@ -242,7 +259,7 @@ export default function Index() {
                     <div className="row col-12 bg-white m-0 shadow-sm p-3 rounded mt-3">
                         <div className="col-12 p-0 border-bottom border-success border-3 d-flex justify-content-between align-items-center">
                             <h4 className="text-success fw-bold mb-0 lh-1">Servicios más solicitados</h4>
-                            <h5 className="bg-success rounded text-white p-2 mb-1 flex-shrink-0"> 
+                            <h5 className="bg-success rounded text-white p-2 mb-1 flex-shrink-0">
                                 <i className="bi bi-star"></i> {mostRequestedServices.length}
                             </h5>
                         </div>
@@ -333,6 +350,13 @@ export default function Index() {
                         </div>
                     </div>
                 </>
+            )}
+            {!isMutating && (
+                <div className="d-flex justify-content-end mt-3">
+                    <button className="btn btn-outline-primary me-2" onClick={handleDownloadPDF}>
+                        Descargar como PDF
+                    </button>
+                </div>
             )}
         </div>
     );

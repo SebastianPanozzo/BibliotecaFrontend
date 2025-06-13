@@ -1,13 +1,29 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import DinamicModal from '../../../components/DinamicModal';
 import useFetchData from "../../../hooks/useFetchData"
+import html2pdf from "html2pdf.js";
 
 function AppointmentList({ appointments, error, isMutating }) {
+    const sectionRef = useRef();
     const [orderBy, setOrderBy] = useState("createdAt");
     const [orderDirection, setOrderDirection] = useState("asc"); // 'asc' para ascendente, 'desc' para descendente
 
     // Utilizamos una variable para el array ordenado que se recalcula cuando cambian las dependencias
     const appointmentSorted = appointments?.length > 0 ? orderByStr(orderBy, appointments, orderDirection) : [];
+
+    const handleDownloadPDF = () => {
+        const element = sectionRef.current;
+
+        const opt = {
+            margin: 0.5,
+            filename: 'mi-seccion.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    };
 
     return (
         <div className="row m-0 py-3 ">
@@ -15,6 +31,12 @@ function AppointmentList({ appointments, error, isMutating }) {
                 <div className="shadow-sm bg-light p-3 text-success rounded d-flex align-items-center justify-content-between">
                     <h4>Tu lista de turnos: </h4>
                     <div className="dropdown-center">
+                        {appointmentSorted && appointmentSorted.length > 0 && (
+                            <button className="btn btn-outline-primary me-2" onClick={handleDownloadPDF}>
+                                Descargar como PDF
+                            </button>
+                        )}
+
                         <button className="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Ordenar por:
                         </button>
@@ -44,7 +66,9 @@ function AppointmentList({ appointments, error, isMutating }) {
             {(!error && !isMutating) && (
                 <div className="col-12">
                     {appointmentSorted.length > 0 ? (
-                        < DropAppointment appointments={appointmentSorted} />
+                        <div ref={sectionRef}>
+                            < DropAppointment appointments={appointmentSorted} />
+                        </div>
                     ) : (
                         <div className="col-12 mt-3">
                             <div className="p-5 alert alert-warning text-center mb-0 shadow-sm" role="alert">
@@ -67,6 +91,7 @@ function AppointmentList({ appointments, error, isMutating }) {
 };
 
 function DropAppointment({ appointments }) {
+    const sectionRef = useRef();
     const [openAccordion, setOpenAccordion] = useState();
 
     function total(reserva) {
@@ -96,8 +121,22 @@ function DropAppointment({ appointments }) {
         return totalConDescuentos;
     }
 
+    const handleDownloadPDF = () => {
+        const element = sectionRef.current;
+
+        const opt = {
+            margin: 0.5,
+            filename: 'mi-seccion.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+    };
+
     return (
-        <div className="accordion" id="accordionTurnos">
+        <div ref={sectionRef} className="accordion" id="accordionTurnos">
             {appointments.map((turno) => (
                 <div className="accordion-item shadow-sm border-0 mt-3 bg-body-secondary rounded" key={turno._id}>
                     <div className="accordion-header rounded">
@@ -228,17 +267,20 @@ function DropAppointment({ appointments }) {
                                 </div>
                             </div>
                             <div className='col-12 d-flex justify-content-center justify-content-md-end align-items-center border-top border-2 mt-3'>
+                                <button className="btn btn-sm btn-outline-primary me-2 mt-2" onClick={handleDownloadPDF}>
+                                    Descargar detalle como PDF
+                                </button>
                                 {turno.status === 'pending' ? (
                                     <div className='d-flex'>
                                         <button
                                             data-bs-toggle="modal"
                                             data-bs-target={`#finished-${turno._id}`}
-                                            className='btn btn-success mt-2 me-2'
+                                            className='btn btn-sm btn-success mt-2 me-2'
                                         >Finalizar Atención</button>
                                         <button
                                             data-bs-toggle="modal"
                                             data-bs-target={`#cancelled-${turno._id}`}
-                                            className='btn btn-danger mt-2'
+                                            className='btn btn-sm btn-danger mt-2'
                                         >Cancelar Atención</button>
                                     </div>
                                 ) : turno.status === 'cancelled' ? (
