@@ -1,7 +1,4 @@
-export const analyticsQuery = () => {
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+export const analyticsQuery = (fromDate, toDate) => {
 
     return [
         {
@@ -14,7 +11,7 @@ export const analyticsQuery = () => {
                                 "$duration.start",
                                 {
                                     "$dateFromString": {
-                                        "dateString": startOfMonth.toISOString()
+                                        "dateString": fromDate.toISOString()
                                     }
                                 }
                             ]
@@ -24,7 +21,7 @@ export const analyticsQuery = () => {
                                 "$duration.end",
                                 {
                                     "$dateFromString": {
-                                        "dateString": startOfNextMonth.toISOString()
+                                        "dateString": toDate.toISOString()
                                     }
                                 }
                             ]

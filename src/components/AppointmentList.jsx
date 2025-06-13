@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import DinamicModal from './DinamicModal';
+import useFetchData from "../hooks/useFetchData"
 
 function AppointmentList({ appointments, error, isMutating }) {
     const [orderBy, setOrderBy] = useState("createdAt");
@@ -8,8 +10,6 @@ function AppointmentList({ appointments, error, isMutating }) {
     const appointmentSorted = appointments?.items?.length > 0
         ? orderByStr(orderBy, appointments.items, orderDirection)
         : [];
-
-    console.log("appointments:", appointments?.items);
 
     return (
         <div className="row m-0 py-3 card">
@@ -63,13 +63,15 @@ function AppointmentList({ appointments, error, isMutating }) {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
 
 function DropAppointment({ appointments }) {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [openAccordion, setOpenAccordion] = useState();
+    const { trigger, error, isMutating } = useFetchData("/api/updateEvent");
+    const [update, setUpdate] = useState();
 
     function total(reserva) {
         const subtotal = reserva.services.reduce((total, servicio) => {
@@ -96,6 +98,21 @@ function DropAppointment({ appointments }) {
 
         totalConDescuentos = Math.max(0, totalConDescuentos);
         return totalConDescuentos;
+    }
+
+    const cancelTurno = async (id) => {
+        try {
+            await trigger({
+                method: 'PUT',
+                id: `/${id}`,
+                body: { "status": "cancelled" },
+                headers: { "Authorization": currentUser.token }
+            });
+            setUpdate("Turno cancelado con exito");
+            setTimeout(() => window.location.reload(), 1500); // Recargar para ver los cambios
+        } catch (error) {
+            console.error("Error al eliminar el servicio:", error);
+        }
     }
 
     return (
@@ -156,8 +173,8 @@ function DropAppointment({ appointments }) {
                                 </div>
                             )}
                             <div className='card border-0 mb-3 bg-white shadow-sm rounded p-3'>
-                                    <h6 className='border-bottom pb-1 mb-1'>Observación:</h6>
-                                    <p>{turno.description ? turno.description : "Todavía no tienes una observación." }</p>
+                                <h6 className='border-bottom pb-1 mb-1'>Observación:</h6>
+                                <p>{turno.description ? turno.description : "Todavía no tienes una observación."}</p>
                             </div>
 
                             {turno.services.map((servicio) => (
@@ -231,13 +248,52 @@ function DropAppointment({ appointments }) {
                             </div>
                             <div className='col-12 d-flex justify-content-center justify-content-md-end align-items-center border-top border-2 mt-3'>
                                 {turno.status === 'pending' ? (
-                                    <button className='btn btn-danger btn-sm mt-2'>Cancelar Turno</button>
+                                    <button
+                                        className='btn btn-danger btn-sm mt-2'
+                                        data-bs-toggle="modal"
+                                        data-bs-target={`#${turno._id}`}
+                                    >Cancelar Turno</button>
                                 ) : turno.status === 'cancelled' ? (
                                     <button disabled className='btn btn-danger btn-sm mt-2'>Turno Cancelado</button>
                                 ) : null}
                             </div>
                         </div>
                     </div>
+                    <DinamicModal title={"Cancelar el turno"} id={turno._id}>
+                        <div className='text-center'>
+                            <p className='fs-5'>¿Estás seguro de cancelar el turno?</p>
+                            <p>El turno se cancelará y no se podrá modificar.</p>
+                            <small></small>
+                        </div>
+                        {isMutating && (
+                            <div className="col-12 mt-3">
+                                <div className="p-4 alert alert-warning text-center mb-0 text-warning shadow-sm" role="alert">
+                                    <p className="fs-6 fw-bold mb-3">Actualizando el estado del turno...</p>
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {error && (
+                            <div className="col-12 mt-3">
+                                <div className="p-5 alert alert-danger text-center mb-0 text-danger shadow-sm" role="alert">
+                                    <p className="fs-6 fw-bold">Error al cancelar el turno</p>
+                                </div>
+                            </div>
+                        )}
+                        {update && (
+                            <div className="col-12 mt-3">
+                                <div className="p-5 alert alert-success text-center mb-0 text-success shadow-sm" role="alert">
+                                    <p className="fs-6 fw-bold">{update}</p>
+                                </div>
+                            </div>
+                        )}
+                        <div className='d-flex justify-content-between mt-3'>
+                            <button className='btn btn-primary' data-bs-dismiss="modal">No cancelar</button>
+                            <button className='btn btn-danger' onClick={() => cancelTurno(turno._id)}>Cancelar Turno</button>
+                        </div>
+                    </DinamicModal>
                 </div>
             ))}
         </div>
@@ -248,7 +304,7 @@ const GetStatus = ({ status }) => {
     switch (status) {
         case 'pending':
             return (
-                <div className='d-flex badge rounded p-2 px-3 bg-warning bg-opacity-75 '>
+                <div className='d-flex badge rounded-pill p-2 px-3 bg-warning bg-opacity-75 '>
                     <i className="bi bi-clock"></i><p className='m-0 ms-2'>Pendiente</p>
                 </div>
             );

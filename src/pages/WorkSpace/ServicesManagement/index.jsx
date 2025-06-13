@@ -114,7 +114,7 @@ export default function Index() {
                             filteredServices.map((service) => (
                                 <div key={service._id} className="row col-12 m-0 mt-3 bg-white shadow border rounded p-2 py-3 py-sm-2">
                                     {/* Imagen del servicio */}
-                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{maxHeight: '100px' }}>
+                                    <div className="col-sm-2 col-lg-1 d-flex justify-content-center p-sm-0 mb-3 mb-sm-0" style={{ maxHeight: '100px' }}>
                                         <img
                                             src={service.image || "https://energiaelectrica.com.ar/images/default.jpg"}
                                             alt={service.name}
@@ -393,7 +393,7 @@ const NewServiceModal = () => {
                             className="form-control border-success"
                             id="materials_included"
                             name="materials_included"
-                            value={formData.props.materials_included.join(', ')}
+                            value={formData.props.materials_included?.join(', ') || ''}
                             onChange={handleChange}
                             placeholder="Ej: Toallas, Aceites, Piedras"
                         />
@@ -424,7 +424,13 @@ const NewServiceModal = () => {
 // Componente para editar servicio
 const EditServiceModal = ({ service }) => {
     const { trigger: updateService } = useFetchData("/api/updateObject");
-    const [formData, setFormData] = useState(service);
+    const [formData, setFormData] = useState({
+        ...service,
+        props: {
+            ...service.props,
+            materials_included: service.props.materials_included || [] // Si es undefined, usa un array vacío
+        }
+    });
     const [serviceUpdated, setServiceUpdated] = useState(null);
     const [isError, setIsError] = useState(false);
     const [errors, setErrors] = useState({}); // Para validación de formulario
@@ -477,11 +483,13 @@ const EditServiceModal = ({ service }) => {
             return;
         }
 
+        const { _id, ...sendUpdateService } = formData;
+
         try {
             await updateService({
                 method: 'PUT',
                 id: `/${service._id}`,
-                body: formData,
+                body: sendUpdateService,
                 headers: { "Authorization": currentUser.token }
             });
 
@@ -591,7 +599,7 @@ const EditServiceModal = ({ service }) => {
                         className="form-control border-success"
                         id="edit-materials_included"
                         name="materials_included"
-                        value={formData.props.materials_included.join(', ')}
+                        value={formData.props.materials_included?.join(', ') || ''}
                         onChange={handleChange}
                         placeholder="Ej: Toallas, Aceites, Piedras"
                     />

@@ -3,9 +3,10 @@ import Calendar from "../../../components/Calendar"
 import useFetchData from '../../../hooks/useFetchData';
 import { appointmentsData } from "./query"
 import AppointmentList from "./AppointmentList";
-const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
 
 export default function AppointmentManagement() {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const [isMobile, setIsMobile] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [month, setMonth] = useState(new Date());
@@ -17,7 +18,7 @@ export default function AppointmentManagement() {
         try {
             const response = await getAppointments({
                 method: 'POST',
-                body: appointmentsData(selectedMonth),
+                body: appointmentsData(selectedMonth, currentUser._id),
                 headers: { "Authorization": currentUser.token }
             });
             setAppointments(response?.items || []);
@@ -133,7 +134,7 @@ export default function AppointmentManagement() {
                                     Turnos del Día
                                 </h5>
                                 {selectedDate && (
-                                    <span className="badge bg-success">
+                                    <span className="badge bg-success p-3">
                                         {appointmentsForSelectedDate.length}
                                     </span>
                                 )}

@@ -124,20 +124,20 @@ export default function ShopCart2() {
                     )}
                 </div>
             </div>
-            <div class="modal fade" id="miModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true" ref={modalRef}>
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="miModalLabel">Confirmar Pago</h5>
+            <div className="modal fade" id="miModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="miModalLabel" aria-hidden="true" ref={modalRef}>
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="miModalLabel">Confirmar Pago</h5>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             {(!isMutating && !pay) && (
-                                <div class="alert alert-info text-center mb-0" role="alert">
+                                <div className="alert alert-info text-center mb-0" role="alert">
                                     <p className="fs-6">Está seguro que desea realizar el pago?</p>
                                 </div>
                             )}
                             {isMutating && (
-                                <div class="alert alert-warning text-center mb-0" role="alert">
+                                <div className="alert alert-warning text-center mb-0" role="alert">
                                     <p className="mb-2 fs-6">Realizando el Pago</p>
                                     <div className="spinner-border" role="status">
                                         <span className="visually-hidden">Loading...</span>
@@ -145,24 +145,24 @@ export default function ShopCart2() {
                                 </div>
                             )}
                             {pay && !error && (
-                                <div class="alert alert-success text-center mb-0" role="alert">
+                                <div className="alert alert-success text-center mb-0" role="alert">
                                     <p className="fs-6">{pay}</p>
                                 </div>
                             )}
                             {error && !isMutating && (
-                                <div class="alert alert-danger text-center mb-0" role="alert">
+                                <div className="alert alert-danger text-center mb-0" role="alert">
                                     <p className="fs-6">{pay}</p>
                                 </div>
                             )}
 
                         </div>
-                        <div class={`modal-footer d-flex align-items-center ${pay && !error ? "justify-content-center" : "justify-content-between"}`}>
+                        <div className={`modal-footer d-flex align-items-center ${pay && !error ? "justify-content-center" : "justify-content-between"}`}>
                             {pay && !error ? (
-                                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" onClick={() => navigateTo("/profile")}>Ir a mi Perfil</button>
+                                <button type="button" className="btn btn-outline-success" data-bs-dismiss="modal" onClick={() => navigateTo("/profile")}>Ir a mi Perfil</button>
                             ) : (
                                 <>
-                                    <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-outline-success" onClick={handlePay}>Confirmar</button>
+                                    <button type="button" className="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="button" className="btn btn-outline-success" onClick={handlePay}>Confirmar</button>
                                 </>
                             )}
                         </div>

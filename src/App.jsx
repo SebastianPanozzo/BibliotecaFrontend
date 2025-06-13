@@ -8,7 +8,6 @@ import Sections from "./pages/Landing/Sections";
 import Login from "./pages/Login/login";
 import Register from "./pages/Register/Register";
 import ServiceTypes from "./pages/Landing/serviceTypes/serviceTypes";
-import ShopCartOld from "./pages/Landing/ShopCart/ShopCart";
 import ShopCart from "./pages/Landing/ShopCart/ShopCart2";
 import Profile from "./pages/Landing/Profile"
 
@@ -86,14 +85,6 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ShopCart />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/shopCartOld",
-        element: (
-          <ProtectedRoute>
-            <ShopCartOld />
           </ProtectedRoute>
         ),
       },

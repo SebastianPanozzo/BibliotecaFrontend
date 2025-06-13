@@ -37,8 +37,7 @@ function Location() {
                         </div>
                         <div className="mb-4 mb-lg-0">
                             <p className="fs-4 fw-bolder text-success mb-0"><i className="bi bi-heart-fill"></i> Hora de atención</p>
-                            <p className="fw-medium mb-0">Lunes a Viernes: 9:00 hs - 20:00 hs</p>
-                            <p className="fw-medium mb-0">Sávados: 9:00 hs - 12:00 hs</p>
+                            <p className="fw-medium mb-0">Lunes a Viernes: 8:00 hs - 16:00 hs</p>
                         </div>
                         <div className="mb-4 mb-lg-0">
                             <p className="fs-4 fw-bolder text-success mb-0"><i className="bi bi-droplet-half"></i> Cómo Llegar</p>
