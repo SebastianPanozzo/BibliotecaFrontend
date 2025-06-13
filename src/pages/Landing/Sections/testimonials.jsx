@@ -72,11 +72,11 @@ function Testimonials() {
                     width: 100%;
                     height: 100%;
                     background: linear-gradient(135deg, 
-                        rgba(0, 170, 91, 0.57) 0%, 
-                        rgba(0, 170, 91, 0.57) 25%, 
-                        rgba(0, 170, 91, 0.57) 50%, 
-                        rgba(0, 170, 91, 0.57) 75%, 
-                        rgba(0, 170, 91, 0.57) 100%);
+                        rgba(3, 119, 71, 0.57) 0%, 
+                        rgba(3, 119, 71, 0.57) 25%, 
+                        rgba(3, 119, 71, 0.57) 50%, 
+                        rgba(3, 119, 71, 0.57) 75%, 
+                        rgba(3, 119, 71, 0.57) 100%);
                     z-index: -1;
                     pointer-events: none;
                 }
