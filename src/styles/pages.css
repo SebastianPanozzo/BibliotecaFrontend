@@ -1,0 +1,266 @@
+/* ==================== src/styles/pages.css ==================== */
+
+/* Página Home */
+.home-stats .card {
+  border-top: 4px solid;
+  transition: all 0.3s ease;
+}
+
+.home-stats .card:nth-child(1) {
+  border-top-color: #0d6efd;
+}
+
+.home-stats .card:nth-child(2) {
+  border-top-color: #198754;
+}
+
+.home-stats .card:nth-child(3) {
+  border-top-color: #0dcaf0;
+}
+
+.home-stats .card:nth-child(4) {
+  border-top-color: #ffc107;
+}
+
+.home-stats .card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.home-stats i {
+  transition: all 0.3s ease;
+}
+
+.home-stats .card:hover i {
+  transform: scale(1.2) rotate(5deg);
+}
+
+/* Página de Libros */
+.libros-page .card {
+  margin-bottom: 2rem;
+}
+
+.search-highlight {
+  background-color: yellow;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+/* Página de Socios */
+.socios-page .badge {
+  font-size: 0.85rem;
+  padding: 0.4em 0.8em;
+}
+
+/* Página de Préstamos */
+.prestamos-page .badge {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.prestamos-vencidos {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Página de Multas */
+.multas-stats .card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.multas-stats h3,
+.multas-stats h4 {
+  font-weight: 700;
+}
+
+/* Tabla responsive mejorada */
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .btn-group-sm .btn {
+    padding: 0.15rem 0.3rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Página NotFound */
+.not-found-container {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-container i {
+  animation: swing 2s ease-in-out infinite;
+}
+
+@keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(10deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+/* Estilos para modal de devolución */
+.devolucion-form .form-check {
+  padding: 1rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.devolucion-form .form-check:hover {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.devolucion-form .form-check-input:checked ~ .form-check-label {
+  font-weight: 600;
+}
+
+/* Estilos para filtros */
+.filter-group .btn {
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+}
+
+/* Efecto de loading en botones */
+.btn.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.btn.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mejoras de accesibilidad */
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Efectos de hover mejorados */
+a:not(.btn):hover {
+  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+/* Estilos para código */
+code {
+  background-color: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #d63384;
+  border: 1px solid #e9ecef;
+}
+
+/* Separadores visuales */
+hr {
+  opacity: 0.1;
+  margin: 1.5rem 0;
+}
+
+/* Contenedores de acción rápida */
+.quick-actions .card {
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+
+.quick-actions .card:hover {
+  border-color: var(--bs-primary);
+  transform: translateY(-5px);
+}
+
+.quick-actions i {
+  transition: transform 0.3s ease;
+}
+
+.quick-actions .card:hover i {
+  transform: scale(1.15);
+}
+
+/* Print styles */
+@media print {
+  .navbar,
+  .btn,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+/* Dark mode support (preparado para futura implementación) */
+@media (prefers-color-scheme: dark) {
+  /* Estilos para modo oscuro */
+}
+
+/* Animaciones sutiles */
+.subtle-bounce {
+  animation: subtleBounce 2s ease-in-out infinite;
+}
+
+@keyframes subtleBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
