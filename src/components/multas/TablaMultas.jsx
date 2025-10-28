@@ -1,5 +1,5 @@
 // ==================== src/components/multas/TablaMultas.jsx ====================
-import { formatearFecha, formatearMoneda } from '../../utils/Formatters';
+import { formatearFecha, formatearMoneda } from '../../utils/formatters';
 
 function TablaMultas({ multas, onVer, onPagar, onCancelar }) {
   if (!multas || multas.length === 0) {

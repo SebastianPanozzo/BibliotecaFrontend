@@ -1,5 +1,5 @@
 // ==================== src/components/multas/DetalleMulta.jsx ====================
-import { formatearFecha, formatearFechaHora, formatearMoneda } from '../../utils/Formatters';
+import { formatearFecha, formatearFechaHora, formatearMoneda } from '../../utils/formatters';
 
 function DetalleMulta({ multa, onClose }) {
   if (!multa) return null;

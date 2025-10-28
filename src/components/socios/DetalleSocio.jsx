@@ -1,5 +1,5 @@
 // ==================== src/components/socios/DetalleSocio.jsx ====================
-import { formatearFecha } from '../../utils/Formatters';
+import { formatearFecha } from '../../utils/formatters';
 
 function DetalleSocio({ socio, onClose }) {
   if (!socio) return null;

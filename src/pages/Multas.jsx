@@ -9,7 +9,7 @@ import ConfirmModal from '../components/common/ConfirmModal';
 import TablaMultas from '../components/multas/TablaMultas';
 import FormularioMulta from '../components/multas/FormularioMulta';
 import DetalleMulta from '../components/multas/DetalleMulta';
-import { formatearMoneda } from '../utils/Formatters';
+import { formatearMoneda } from '../utils/formatters';
 
 function Multas() {
   const {
