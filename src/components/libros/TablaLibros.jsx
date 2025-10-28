@@ -1,5 +1,5 @@
 // ==================== src/components/libros/TablaLibros.jsx ====================
-import { formatearFecha } from '../../utils/Formatters';
+import { formatearFecha } from '../../utils/formatters';
 
 function TablaLibros({ libros, onVer, onEditar, onEliminar }) {
   if (!libros || libros.length === 0) {

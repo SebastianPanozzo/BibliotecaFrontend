@@ -1,6 +1,6 @@
 // ==================== src/components/prestamos/DevolucionForm.jsx ====================
 import { useState } from 'react';
-import { formatearFecha, calcularDiasEntre } from '../../utils/Formatters';
+import { formatearFecha, calcularDiasEntre } from '../../utils/formatters';
 import { CONFIG_PRESTAMO } from '../../utils/constants';
 
 function DevolucionForm({ prestamo, onSubmit, onCancel }) {

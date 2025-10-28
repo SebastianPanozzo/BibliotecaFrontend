@@ -1,5 +1,5 @@
 // ==================== src/components/prestamos/TablaPrestamos.jsx ====================
-import { formatearFecha, esFechaVencida } from '../../utils/Formatters';
+import { formatearFecha, esFechaVencida } from '../../utils/formatters';
 
 function TablaPrestamos({ prestamos, onVer, onDevolver, onRenovar }) {
   if (!prestamos || prestamos.length === 0) {

@@ -1,5 +1,5 @@
 // ==================== src/components/libros/DetalleLibro.jsx ====================
-import { formatearFecha } from '../../utils/Formatters';
+import { formatearFecha } from '../../utils/formatters';
 import { GENEROS_LIBRO } from '../../utils/constants';
 
 function DetalleLibro({ libro, onClose }) {

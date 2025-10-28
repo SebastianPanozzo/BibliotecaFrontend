@@ -1,5 +1,5 @@
 // ==================== src/components/socios/TablaSocios.jsx ====================
-import { formatearFecha } from '../../utils/Formatters';
+import { formatearFecha } from '../../utils/formatters';
 
 function TablaSocios({ socios, onVer, onEditar, onDesactivar, onEliminar }) {
   if (!socios || socios.length === 0) {

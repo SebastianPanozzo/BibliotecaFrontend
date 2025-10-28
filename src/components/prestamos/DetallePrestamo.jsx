@@ -1,5 +1,5 @@
 // ==================== src/components/prestamos/DetallePrestamo.jsx ====================
-import { formatearFecha, formatearFechaHora } from '../../utils/Formatters';
+import { formatearFecha, formatearFechaHora } from '../../utils/formatters';
 
 function DetallePrestamo({ prestamo, onClose }) {
   if (!prestamo) return null;
