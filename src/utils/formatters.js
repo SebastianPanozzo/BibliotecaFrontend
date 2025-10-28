@@ -103,7 +103,7 @@ export const capitalize = (str) => {
 };
 
 /**
- * Trunca un texto a una longitud específica
+ * Trunca un texto a una longitud específicas
  * @param {string} texto - Texto a truncar
  * @param {number} longitud - Longitud máxima
  * @returns {string} Texto truncado
