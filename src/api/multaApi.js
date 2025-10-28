@@ -49,9 +49,11 @@ export const multaApi = {
     return response.data;
   },
 
-  // Cancelar multa
-  cancelar: async (id) => {
-    const response = await axiosInstance.put(`${MULTA_ENDPOINT}/${id}/cancelar`);
+  // Cancelar multa - CORREGIDO: Enviar el motivo en el body
+  cancelar: async (id, motivo = '') => {
+    const response = await axiosInstance.put(`${MULTA_ENDPOINT}/${id}/cancelar`, {
+      motivo: motivo
+    });
     return response.data;
   },
 };
